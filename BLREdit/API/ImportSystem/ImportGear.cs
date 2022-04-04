@@ -30,7 +30,7 @@ namespace BLREdit
 
         public WikiStats[] GetWikiStats()
         {
-            List<WikiStats> stats = new List<WikiStats>();
+            List<WikiStats> stats = new();
             stats.AddRange(ImportSystem.GetWikiStats(attachments));
             stats.AddRange(ImportSystem.GetWikiStats(avatars));
             stats.AddRange(ImportSystem.GetWikiStats(badges));
@@ -41,19 +41,6 @@ namespace BLREdit
             stats.AddRange(ImportSystem.GetWikiStats(tactical));
             stats.AddRange(ImportSystem.GetWikiStats(upperBodies));
             return stats.ToArray();
-        }
-
-        public void UpdateImages()
-        {
-            ImportSystem.UpdateImagesForImportItems(attachments);
-            ImportSystem.UpdateImagesForImportItems(avatars);
-            ImportSystem.UpdateImagesForImportItems(badges);
-            ImportSystem.UpdateImagesForImportItems(emotes);
-            ImportSystem.UpdateImagesForImportItems(hangers);
-            ImportSystem.UpdateImagesForImportItems(helmets);
-            ImportSystem.UpdateImagesForImportItems(lowerBodies);
-            ImportSystem.UpdateImagesForImportItems(tactical);
-            ImportSystem.UpdateImagesForImportItems(upperBodies);
         }
 
         public ImportGear() { }

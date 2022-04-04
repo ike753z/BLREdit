@@ -93,7 +93,7 @@ namespace BLREdit.API.Utils
 
         private static void CreateCacheImage(Uri source, Uri target, BitmapImage background)
         {
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            PngBitmapEncoder encoder = new();
             if (!File.Exists(source.LocalPath))
             {
                 encoder.Frames.Add(BitmapFrame.Create(background));
@@ -103,20 +103,18 @@ namespace BLREdit.API.Utils
                 encoder.Frames.Add(BitmapFrame.Create(CombineImage(source, background)));
             }
 
-            using (var fileStream = new FileStream(target.LocalPath, FileMode.Create))
-            {
-                    encoder.Save(fileStream);
-                    fileStream.Close();
-            }
+            using var fileStream = new FileStream(target.LocalPath, FileMode.Create);
+            encoder.Save(fileStream);
+            fileStream.Close();
         }
 
 
         private static BitmapSource CombineImage(Uri source, BitmapImage empty, bool Uniform = true)
         {
-            DrawingGroup group = new DrawingGroup();
+            DrawingGroup group = new();
 
 
-            ImageDrawing baseImage = new ImageDrawing //background for Image
+            ImageDrawing baseImage = new() //background for Image
             {
                 Rect = new Rect(0, 0, empty.Width, empty.Height),
                 ImageSource = empty
@@ -125,7 +123,7 @@ namespace BLREdit.API.Utils
 
             var tmp = new BitmapImage(source); //Load the actual image we want to draw
 
-            ImageDrawing actualImage = new ImageDrawing
+            ImageDrawing actualImage = new()
             {
                 Rect = CreateRectForImage(empty.Width, empty.Height, tmp.PixelWidth, tmp.PixelHeight, Uniform),
                 ImageSource = tmp
@@ -173,12 +171,12 @@ namespace BLREdit.API.Utils
 
         public static BitmapSource ToBitmapSource(DrawingImage source)
         {
-            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingVisual drawingVisual = new();
             DrawingContext drawingContext = drawingVisual.RenderOpen();
             drawingContext.DrawImage(source, new Rect(new Point(0, 0), new Size(source.Width, source.Height)));
             drawingContext.Close();
 
-            RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(drawingVisual);
             return bmp;
         }
@@ -204,9 +202,9 @@ namespace BLREdit.API.Utils
             BitmapSource bitmap = BitmapSource.Create(width, height,
                 96, 96, pf, null,
                 rawImage, rawStride);
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            MemoryStream stream = new MemoryStream();
-            BitmapImage bitmapImage = new BitmapImage();
+            PngBitmapEncoder encoder = new();
+            MemoryStream stream = new();
+            BitmapImage bitmapImage = new();
             encoder.Frames.Add(BitmapFrame.Create(bitmap));
             encoder.Save(stream);
 

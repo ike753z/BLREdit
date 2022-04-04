@@ -17,12 +17,14 @@ namespace BLREdit.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static Random rng = new Random();
+        private static Random rng = new();
 
         /// <summary>
         /// Contains the last selected Image for setting the ItemList
         /// </summary>
-        public static Image LastSelectedImage { get; private set; } = null;
+        public static Image LastSelectedImage { get; private set; }
+
+        public static ImportItem[] lastList = null;
 
         /// <summary>
         /// Contains the weapon to filter out Items From the ItemList
@@ -52,11 +54,15 @@ namespace BLREdit.UI
 
         public MainWindow()
         {
+            ImportSystem.Initialize();
+
             self = this;
             IsPlayerProfileChanging = true;
             IsPlayerNameChanging = true;
 
             InitializeComponent();
+
+            
 
             ItemList.Items.Filter += new Predicate<object>(o =>
             {
@@ -164,7 +170,7 @@ namespace BLREdit.UI
 
         private static void UpdateStats(ImportItem Reciever, ImportItem Barrel, ImportItem Magazine, ImportItem Muzzle, ImportItem Scope, ImportItem Stock, Label DamageLabel, Label ROFLabel, Label AmmoLabel, Label ReloadLabel, Label SwapLabel, Label AimLabel, Label HipLabel, Label MoveLabel, Label RecoilLabel, Label ZoomRecoilLabel, Label ZoomLabel, Label ScopeInLabel, Label RangeLabel, Label RunLabel, Label Descriptor)
         {
-            var watch = LoggingSystem.LogInfo("Updating Stats", "");
+            var watch = LoggingSystem.Log("Updating Stats", LogTypes.Timing, "");
 
             double Damage = 0, DamageFar = 0, ROF = 0, AmmoMag = 0, AmmoRes = 0, Reload = 0, Swap = 0, Aim = 0, Hip = 0, Move = 0, Recoil = 0, RecoilZoom = 0, Zoom = 0, ScopeIn = 0, RangeClose = 0, RangeFar = 0, RangeMax = 0, Run = 0, MoveSpeed = 0, CockRateMultiplier = 0, ReloadRateMultiplier = 0;
             double BaseScopeIn = 0;
@@ -173,7 +179,7 @@ namespace BLREdit.UI
 
             if (CheckCalculationReady(Reciever))
             {
-                List<ImportItem> items = new List<ImportItem>();
+                List<ImportItem> items = new();
                 if (Reciever != null)
                     items.Add(Reciever);
                 if (Barrel != null)
@@ -267,7 +273,7 @@ namespace BLREdit.UI
                 CockRateMultiplier = CalculateCockRate(Reciever, allRecoil);
                 ReloadRateMultiplier = CalculateReloadRate(Reciever, allRecoil, allReloadSpeed);
 
-                List<ImportItem> mods = new List<ImportItem>();
+                List<ImportItem> mods = new();
                 if (Barrel != null)
                     mods.Add(Barrel);
                 if (Magazine != null)
@@ -302,7 +308,7 @@ namespace BLREdit.UI
             RangeLabel.Content = RangeClose.ToString("0.0") + " / " + RangeFar.ToString("0.0") + " / " + RangeMax.ToString("0");
             RunLabel.Content = MoveSpeed.ToString("0.00");
             Descriptor.Content = barrelVSmag + " " + stockVSmuzzle + " " + weaponDescriptor;
-            LoggingSystem.LogInfoAppend(watch);
+            LoggingSystem.Append(watch);
         }
 
         private static double TotalPoints(IEnumerable<ImportItem> items)
@@ -648,11 +654,11 @@ namespace BLREdit.UI
                 if (Reciever?.IniStats.MagSize > 0)
                 {
                     double averageShotCount = Math.Min(Reciever?.IniStats.MagSize ?? 0, 15.0f);
-                    Vector3 averageRecoil = new Vector3(0, 0, 0);
+                    Vector3 averageRecoil = new(0, 0, 0);
 
                     for (int shot = 1; shot <= averageShotCount; shot++)
                     {
-                        Vector3 newRecoil = new Vector3(0, 0, 0)
+                        Vector3 newRecoil = new(0, 0, 0)
                         {
                             X = (Reciever.IniStats.RecoilVector.X * Reciever.IniStats.RecoilVectorMultiplier.X * 0.5f) / 2.0f, // in the recoil, recoil vector is actually a multiplier on a random X and Y value in the -0.5/0.5 and 0.0/0.3535 range respectively
                             Y = (Reciever.IniStats.RecoilVector.Y * Reciever.IniStats.RecoilVectorMultiplier.Y * 0.3535f)
@@ -781,26 +787,26 @@ namespace BLREdit.UI
             if(image.DataContext is ImportItem importItem)
             {
                 if (!importItem.IsValidFor(item) || !item.IsValidModType(importItem.Category))
-                { LoggingSystem.LogInfo(importItem.name + " was not a Valid Mod for " + item.name); image.DataContext = null; }
+                { LoggingSystem.Log(importItem.name + " was not a Valid Mod for " + item.name); image.DataContext = null; }
             }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SetItemList(ImportSystem.Weapons.primary);
-            if (App.IsNewVersionAvailable && BLREditSettings.Settings.ShowUpdateNotice)
+            if (App.IsNewVersionAvailable && App.Settings.ShowUpdateNotice)
             {
                 System.Diagnostics.Process.Start("https://github.com/" + App.CurrentOwner + "/" + App.CurrentRepo + "/releases");
             }
-            if (BLREditSettings.Settings.DoRuntimeCheck || BLREditSettings.Settings.ForceRuntimeCheck)
+            if (App.Settings.DoRuntimeCheck || App.Settings.ForceRuntimeCheck)
             {
-                App.RuntimeCheck(BLREditSettings.Settings.ForceRuntimeCheck);
+                App.RuntimeCheck(App.Settings.ForceRuntimeCheck);
             }
         }
 
         private void ItemList_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            LoggingSystem.LogInfo("MouseDown in ListView/StackPanel");
+            LoggingSystem.Log("MouseDown in ListView/StackPanel");
             var pt = e.GetPosition(ItemList);
             var result = VisualTreeHelper.HitTest(ItemList, pt);
             if (result.VisualHit is Image image)
@@ -813,14 +819,14 @@ namespace BLREdit.UI
                     }
                     else
                     {
-                        LoggingSystem.LogInfo("Sending:" + item.name);
+                        LoggingSystem.Log("Sending:" + item.name);
                         DragDrop.DoDragDrop(image, item, DragDropEffects.Copy);
                     }
                 }
             }
             else if (result.VisualHit is StackPanel panel)
             {
-                LoggingSystem.LogInfo(panel.DataContext.ToString());
+                LoggingSystem.Log(panel.DataContext.ToString());
                 foreach (var child in panel.Children)
                 {
                     if (child is Image imageChild)
@@ -833,7 +839,7 @@ namespace BLREdit.UI
                             }
                             else
                             {
-                                LoggingSystem.LogInfo("Sending:" + item.name);
+                                LoggingSystem.Log("Sending:" + item.name);
                                 DragDrop.DoDragDrop(imageChild, item, DragDropEffects.Copy);
                             }
                         }
@@ -856,7 +862,7 @@ namespace BLREdit.UI
             {
                 if (e.Data.GetData(typeof(ImportItem)) is ImportItem item)
                 {
-                    LoggingSystem.LogInfo("Recieving:" + item.name);
+                    LoggingSystem.Log("Recieving:" + item.name);
                     if (border.Child is Grid grid)
                     {
                         if (grid.Children[0] is Image img)
@@ -883,8 +889,8 @@ namespace BLREdit.UI
                 {
                     if (ImportSystem.Mods.scopes.Contains(item))
                     {
-                        PrimaryScopeImage.DataContext = item; LoggingSystem.LogInfo(item.name + " Set!");
-                        PrimaryCrosshairImage.DataContext = item; LoggingSystem.LogInfo(item.name + "Preview Set!");
+                        PrimaryScopeImage.DataContext = item; LoggingSystem.Log(item.name + " Set!");
+                        PrimaryCrosshairImage.DataContext = item; LoggingSystem.Log(item.name + "Preview Set!");
                     }
                 }
             }
@@ -894,8 +900,8 @@ namespace BLREdit.UI
                 {
                     if (ImportSystem.Mods.scopes.Contains(item))
                     {
-                        SecondaryScopeImage.DataContext = item; LoggingSystem.LogInfo(item.name + " Set!");
-                        SecondaryCrosshairImage.DataContext = item; LoggingSystem.LogInfo(item.name + "Preview Set!");
+                        SecondaryScopeImage.DataContext = item; LoggingSystem.Log(item.name + " Set!");
+                        SecondaryCrosshairImage.DataContext = item; LoggingSystem.Log(item.name + "Preview Set!");
                     }
                 }
             }
@@ -904,7 +910,7 @@ namespace BLREdit.UI
                 if (image.Name.Contains("Primary") && ImportSystem.Weapons.primary.Contains(item))
                 {
                     image.DataContext = item;
-                    LoggingSystem.LogInfo(item.name + " Set!");
+                    LoggingSystem.Log(item.name + " Set!");
                     CheckPrimaryModsForValidity(item);
                     FillEmptyPrimaryMods(item);
                     UpdatePrimaryStats();
@@ -915,7 +921,7 @@ namespace BLREdit.UI
                 if (image.Name.Contains("Secondary") && ImportSystem.Weapons.secondary.Contains(item))
                 {
                     image.DataContext = item;
-                    LoggingSystem.LogInfo(item.name + " Set!");
+                    LoggingSystem.Log(item.name + " Set!");
                     CheckSecondaryModsForValidity(item);
                     FillEmptySecondaryMods(item);
                     UpdateSecondaryStats();
@@ -923,18 +929,18 @@ namespace BLREdit.UI
                         UpdateActiveLoadout();
                     return;
                 }
-                LoggingSystem.LogInfo("Not a Valid Primary or Secondary!");
+                LoggingSystem.Log("Not a Valid Primary or Secondary!");
             }
             else
             {
                 if (image.Name.Contains("Primary") && !item.IsValidFor(PrimaryRecieverImage.DataContext as ImportItem))
-                { LoggingSystem.LogInfo(item.name + " wasn't a Valid Mod for " + (PrimaryRecieverImage.DataContext as ImportItem).name); return; }
+                { LoggingSystem.Log(item.name + " wasn't a Valid Mod for " + (PrimaryRecieverImage.DataContext as ImportItem).name); return; }
 
                 if (image.Name.Contains("Secondary") && !item.IsValidFor(SecondaryRecieverImage.DataContext as ImportItem))
-                { LoggingSystem.LogInfo(item.name + " wasn't a Valid Mod for " + (SecondaryRecieverImage.DataContext as ImportItem).name); return; }
+                { LoggingSystem.Log(item.name + " wasn't a Valid Mod for " + (SecondaryRecieverImage.DataContext as ImportItem).name); return; }
 
                 if (image.Name.Contains("Muzzle") && ImportSystem.Mods.muzzles.Contains(item))
-                { image.DataContext = item; LoggingSystem.LogInfo("Muzzle:" + item.name + " with ID:" + ImportSystem.GetMuzzleID(item) + " Set!"); }
+                { image.DataContext = item; LoggingSystem.Log("Muzzle:" + item.name + " with ID:" + ImportSystem.GetMuzzleID(item) + " Set!"); }
                 if (image.Name.Contains("Barrel") && ImportSystem.Mods.barrels.Contains(item))
                 {
                     if (image.Name.Contains("Secondary"))
@@ -953,13 +959,13 @@ namespace BLREdit.UI
                     image.DataContext = item;
                 }
                 if (image.Name.Contains("Magazine") && ImportSystem.Mods.magazines.Contains(item))
-                { image.DataContext = item; LoggingSystem.LogInfo("Magazine:" + item.name + " with ID:" + ImportSystem.GetMagazineID(item) + " Set!"); }
+                { image.DataContext = item; LoggingSystem.Log("Magazine:" + item.name + " with ID:" + ImportSystem.GetMagazineID(item) + " Set!"); }
                 if (image.Name.Contains("Tag") && ImportSystem.Gear.hangers.Contains(item))
-                { image.DataContext = item; LoggingSystem.LogInfo("Hanger:" + item.name + " with ID:" + ImportSystem.GetTagID(item) + " Set!"); }
+                { image.DataContext = item; LoggingSystem.Log("Hanger:" + item.name + " with ID:" + ImportSystem.GetTagID(item) + " Set!"); }
                 if (image.Name.Contains("CamoWeapon") && ImportSystem.Mods.camosBody.Contains(item))
-                { image.DataContext = item; LoggingSystem.LogInfo("Camo:" + item.name + " with ID:" + ImportSystem.GetCamoBodyID(item) + " Set!"); }
+                { image.DataContext = item; LoggingSystem.Log("Camo:" + item.name + " with ID:" + ImportSystem.GetCamoBodyID(item) + " Set!"); }
                 if (image.Name.Contains("CamoBody") && ImportSystem.Mods.camosBody.Contains(item))
-                { image.DataContext = item; LoggingSystem.LogInfo("Camo:" + item.name + " with ID:" + ImportSystem.GetCamoBodyID(item) + " Set!"); }
+                { image.DataContext = item; LoggingSystem.Log("Camo:" + item.name + " with ID:" + ImportSystem.GetCamoBodyID(item) + " Set!"); }
                 if (image.Name.Contains("Stock") && ImportSystem.Mods.stocks.Contains(item))
                 {
                     if (image.Name.Contains("Primary"))
@@ -982,7 +988,7 @@ namespace BLREdit.UI
                 { image.DataContext = item; }
                 if (image.Name.Contains("Tactical") && ImportSystem.Gear.tactical.Contains(item))
                 { image.DataContext = item; }
-                LoggingSystem.LogInfo(item.name + " Set!");
+                LoggingSystem.Log(item.name + " Set!");
             }
             UpdateArmorStats();
             if (image.Name.Contains("Primary"))
@@ -1256,14 +1262,14 @@ namespace BLREdit.UI
         private void UpdatePrimaryImages(Image image)
         {
             FilterWeapon = PrimaryRecieverImage.DataContext as ImportItem;
-            LoggingSystem.LogInfo("ItemList Filter set Primary:" + (FilterWeapon?.name ?? "None"));
+            LoggingSystem.Log("ItemList Filter set Primary:" + (FilterWeapon?.name ?? "None"));
             SortComboBox1.SetBinding(ComboBox.ItemsSourceProperty, new Binding { Source = new EnumBindingSourceExtension(typeof(ImportWeaponSortingType)) });
 
             if (image.Name.Contains("Reciever"))
             {
                 SetItemList(ImportSystem.Weapons.primary);
                 LastSelectedImage = PrimaryRecieverImage;
-                LoggingSystem.LogInfo("ItemList Set for Primary Reciever");
+                LoggingSystem.Log("ItemList Set for Primary Reciever");
                 return;
             }
 
@@ -1273,31 +1279,35 @@ namespace BLREdit.UI
                 { return; }
                 SetItemList(ImportSystem.Mods.muzzles);
                 LastSelectedImage = image;
-                LoggingSystem.LogInfo("ItemList Set for Muzzles");
+                LoggingSystem.Log("ItemList Set for Muzzles");
                 return;
             }
             if (image.Name.Contains("Crosshair"))
             {
                 var item = (PrimaryScopeImage.DataContext as ImportItem);
-                item.LoadCrosshair();
+                //item.LoadCrosshair();
                 ItemList.ItemsSource = new ImportItem[] { item };
+
+                LoggingSystem.Log(ItemList.ToString());
+
                 LastSelectedImage = PrimaryScopeImage;
-                LoggingSystem.LogInfo("ItemList Set for Scopes");
+                LoggingSystem.Log("ItemList Set for Scopes");
                 return;
             }
             UpdateImages(image);
         }
 
+
         private void UpdateSecondaryImages(Image image)
         {
             FilterWeapon = SecondaryRecieverImage.DataContext as ImportItem;
-            LoggingSystem.LogInfo("ItemList Filter set Secondary:" + (FilterWeapon?.name ?? "None"));
+            LoggingSystem.Log("ItemList Filter set Secondary:" + (FilterWeapon?.name ?? "None"));
 
             if (image.Name.Contains("Reciever"))
             {
                 SetItemList(ImportSystem.Weapons.secondary);
                 LastSelectedImage = SecondaryRecieverImage;
-                LoggingSystem.LogInfo("ItemList Set for Secondary Reciever");
+                LoggingSystem.Log("ItemList Set for Secondary Reciever");
                 return;
             }
 
@@ -1307,16 +1317,16 @@ namespace BLREdit.UI
                 { return; }
                 SetItemList(ImportSystem.Mods.muzzles);
                 LastSelectedImage = image;
-                LoggingSystem.LogInfo("ItemList Set for Muzzles");
+                LoggingSystem.Log("ItemList Set for Muzzles");
                 return;
             }
             if (image.Name.Contains("Crosshair"))
             {
+                // TODO: Update Secondary Scope Preview To Primary When Finished
                 var item = (SecondaryScopeImage.DataContext as ImportItem);
-                item.LoadCrosshair();
                 ItemList.ItemsSource = new ImportItem[] { item };
                 LastSelectedImage = SecondaryScopeImage;
-                LoggingSystem.LogInfo("ItemList Set for Scopes");
+                LoggingSystem.Log("ItemList Set for Scopes");
                 return;
             }
             UpdateImages(image);
@@ -1329,59 +1339,60 @@ namespace BLREdit.UI
             if (image.Name.Contains("Reciever"))
             {
                 SetItemList(ImportSystem.Weapons.primary);
-                LoggingSystem.LogInfo("ItemList Set for Primary Reciever");
+                LoggingSystem.Log("ItemList Set for Primary Reciever");
                 return;
             }
             if (image.Name.Contains("Magazine"))
             {
                 SetItemList(ImportSystem.Mods.magazines);
-                LoggingSystem.LogInfo("ItemList Set for Magazines");
+                LoggingSystem.Log("ItemList Set for Magazines");
                 return;
             }
             if (image.Name.Contains("Stock"))
             {
                 SetItemList(ImportSystem.Mods.stocks);
-                LoggingSystem.LogInfo("ItemList Set for Stocks");
+                LoggingSystem.Log("ItemList Set for Stocks");
                 return;
             }
             if (image.Name.Contains("Scope"))
             {
-                foreach (var item in ImportSystem.Mods.scopes)
-                {
-                    item.RemoveCrosshair();
-                }
                 SetItemList(ImportSystem.Mods.scopes);
-                LoggingSystem.LogInfo("ItemList Set for Scopes");
+                LoggingSystem.Log("ItemList Set for Scopes");
                 return;
             }
             if (image.Name.Contains("Barrel"))
             {
                 SetItemList(ImportSystem.Mods.barrels);
-                LoggingSystem.LogInfo("ItemList Set for Barrels");
+                LoggingSystem.Log("ItemList Set for Barrels");
                 return;
             }
             if (image.Name.Contains("Grip"))
             {
                 SetItemList(ImportSystem.Mods.grips);
-                LoggingSystem.LogInfo("ItemList Set for Grips");
+                LoggingSystem.Log("ItemList Set for Grips");
                 return;
             }
             if (image.Name.Contains("Tag"))
             {
                 SetItemList(ImportSystem.Gear.hangers);
-                LoggingSystem.LogInfo("ItemList Set for Tags");
+                LoggingSystem.Log("ItemList Set for Tags");
                 return;
             }
             if (image.Name.Contains("CamoWeapon"))
             {
                 SetItemList(ImportSystem.Mods.camosBody);
-                LoggingSystem.LogInfo("ItemList Set for 'Weapon' Camos");
+                LoggingSystem.Log("ItemList Set for 'Weapon' Camos");
                 return;
             }
         }
 
         public void SetItemList(ImportItem[] list)
         {
+            if (list == lastList)
+            { return; }
+            else
+            { lastList = list; }
+
             if (list.Length > 0)
             {
                 int index = SortComboBox1.SelectedIndex;
@@ -1440,7 +1451,7 @@ namespace BLREdit.UI
                         {
                             SetItemList(ImportSystem.Gear.attachments);
                             LastSelectedImage = img;
-                            LoggingSystem.LogInfo("ItemList Set for Gear");
+                            LoggingSystem.Log("ItemList Set for Gear");
                             return;
                         }
                     }
@@ -1462,44 +1473,64 @@ namespace BLREdit.UI
                     {
                         SetItemList(ImportSystem.Gear.tactical);
                         LastSelectedImage = image;
-                        LoggingSystem.LogInfo("ItemList Set for Tactical");
+                        LoggingSystem.Log("ItemList Set for Tactical");
                         return;
                     }
                     if (image.Name.Contains("CamoBody"))
                     {
                         SetItemList(ImportSystem.Mods.camosBody);
                         LastSelectedImage = image;
-                        LoggingSystem.LogInfo("ItemList Set for Body Camos");
+                        LoggingSystem.Log("ItemList Set for Body Camos");
                         return;
                     }
                     if (image.Name.Contains("Helmet"))
                     {
                         SetItemList(ImportSystem.Gear.helmets);
                         LastSelectedImage = image;
-                        LoggingSystem.LogInfo("ItemList Set for Helemts");
+                        LoggingSystem.Log("ItemList Set for Helemts");
                         return;
                     }
                     if (image.Name.Contains("UpperBody"))
                     {
                         SetItemList(ImportSystem.Gear.upperBodies);
                         LastSelectedImage = image;
-                        LoggingSystem.LogInfo("ItemList Set for UpperBodies");
+                        LoggingSystem.Log("ItemList Set for UpperBodies");
                         return;
                     }
                     if (image.Name.Contains("LowerBody"))
                     {
                         SetItemList(ImportSystem.Gear.lowerBodies);
                         LastSelectedImage = image;
-                        LoggingSystem.LogInfo("ItemList Set for LowerBodies");
+                        LoggingSystem.Log("ItemList Set for LowerBodies");
                         return;
                     }
-                    LoggingSystem.LogInfo("ItemList Din't get set");
+                    LoggingSystem.Log("ItemList Dind't get set");
                 }
             }
         }
 
-        public void SetLoadout(MagiCowsLoadout loadout)
+        public void SetLoadout(MagiCowsLoadout loadout, int loadoutID = 0)
         {
+            if (loadoutID == 1)
+            { 
+                Loadout1Button.IsEnabled = false;
+                Loadout2Button.IsEnabled = true;
+                Loadout3Button.IsEnabled = true;
+            }
+            else if (loadoutID == 2)
+            {
+                Loadout1Button.IsEnabled = true;
+                Loadout2Button.IsEnabled = false;
+                Loadout3Button.IsEnabled = true;
+            }
+            else if (loadoutID == 3)
+            {
+                Loadout1Button.IsEnabled = true;
+                Loadout2Button.IsEnabled = true;
+                Loadout3Button.IsEnabled = false;
+            }
+
+
             ActiveLoadout = loadout;
             //Set Armor first to get gear slot amount for gear
             SetItemToImage(HelmetImage, loadout.GetHelmet(), false);
@@ -1560,7 +1591,7 @@ namespace BLREdit.UI
                     ExportSystem.ActiveProfile = profile;
                     PlayerNameTextBox.Text = profile.PlayerName;
                     IsFemaleCheckBox.DataContext = profile;
-                    SetLoadout(profile.Loadout1);
+                    SetLoadout(profile.Loadout1, 1);
                 }
                 IsPlayerProfileChanging = false;
             }
@@ -1620,6 +1651,7 @@ namespace BLREdit.UI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ExportSystem.SaveProfiles();
+            IOResources.SaveChecksum();
         }
 
         private void IsFemaleCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -1730,9 +1762,9 @@ namespace BLREdit.UI
             LastSelectedImage = PrimaryRecieverImage;
         }
 
-        private MagiCowsLoadout RandomizeLoadout()
+        private static MagiCowsLoadout RandomizeLoadout()
         {
-            MagiCowsLoadout loadout = new MagiCowsLoadout();
+            MagiCowsLoadout loadout = new();
             //get random recievers
             loadout.Primary = MagiCowsWeapon.GetDefaultSetupOfReciever(ImportSystem.Weapons.primary[rng.Next(0, ImportSystem.Weapons.primary.Length)]);
 
@@ -1788,7 +1820,7 @@ namespace BLREdit.UI
             return loadout;
         }
 
-        private MagiCowsWeapon RandomizeWeapon(ImportItem Weapon, bool IsSecondary = false)
+        private static MagiCowsWeapon RandomizeWeapon(ImportItem Weapon, bool IsSecondary = false)
         {
             MagiCowsWeapon weapon = MagiCowsWeapon.GetDefaultSetupOfReciever(Weapon);
             var Barrels = ImportSystem.Mods.barrels.Where(o => o.IsValidFor(Weapon)).ToArray();
@@ -1831,4 +1863,44 @@ namespace BLREdit.UI
             return weapon;
         }
     }
+
+    static class MainWindowHelper 
+    {
+
+        public static List<T> GetLogicalChildList<T>(this DependencyObject parent) where T : DependencyObject
+        {
+            List<T> logicalCollection = new();
+            GetLogicalChildList(parent, logicalCollection);
+            return logicalCollection;
+        }
+
+        private static void GetLogicalChildList<T>(DependencyObject parent, List<T> logicalCollection) where T : DependencyObject
+        {
+            var children = LogicalTreeHelper.GetChildren(parent);
+            foreach (object child in children)
+            {
+                if (child is DependencyObject)
+                {
+                    DependencyObject depChild = child as DependencyObject;
+                    if (child is T)
+                    {
+                        logicalCollection.Add(child as T);
+                    }
+                    GetLogicalChildList(depChild, logicalCollection);
+                }
+            }
+        }
+
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null) yield return (T)Enumerable.Empty<T>();
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                DependencyObject ithChild = VisualTreeHelper.GetChild(depObj, i);
+                if (ithChild == null) continue;
+                if (ithChild is T t) yield return t;
+                foreach (T childOfChild in FindVisualChildren<T>(ithChild)) yield return childOfChild;
+            }
+        }
+    }    
 }

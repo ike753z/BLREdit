@@ -1,0 +1,22 @@
+﻿<Window x:Class="BLREdit.UI.ProgressBar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BLREdit.UI"
+        mc:Ignorable="d"
+        Closing="OnClosing"
+        WindowStartupLocation="CenterScreen"
+        Title="BLREdit Creating Image Cache" Height="100" Width="300" ContentRendered="Window_ContentRendered">
+    <Grid>
+        <ProgressBar Minimum="0" Maximum="100" Value="0" Name="pbStatus" />
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock.Text>
+                <MultiBinding StringFormat="{}{0}/{1}">
+                    <Binding ElementName="pbStatus" Path="Value" />
+                    <Binding ElementName="pbStatus" Path="Maximum" />
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+    </Grid>
+</Window>

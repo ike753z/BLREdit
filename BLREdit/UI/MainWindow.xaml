@@ -5,11 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:utils="clr-namespace:BLREdit"
         mc:Ignorable="d"
-        Title="BLREdit" Height="1007" Width="1920" Loaded="Window_Loaded" Closing="Window_Closing" Foreground="Black">
+        Title="BLREdit" Height="1007" Width="1920" Loaded="Window_Loaded" Closing="Window_Closing" Foreground="Black" Name="Editor">
 
     <Window.Background>
         <ImageBrush ImageSource="Resources/Default_2016.png" />
     </Window.Background>
+
+    <Window.Resources>
+        <Style x:Key="ScopePreviewVisible" TargetType="Image">
+            <Setter Property="Visibility" Value="Visible"/>
+        </Style>
+        <Style TargetType="Image">
+        </Style>
+    </Window.Resources>
+
     <Grid AllowDrop="True">
         <ListView x:Name="ItemList" Margin="374,22,0,0">
             <ItemsControl.ItemsPanel>
@@ -23,7 +32,7 @@
                         <Border>
                             <Image Source="{Binding WideImage, IsAsync=True}" CacheMode="BitmapCache" HorizontalAlignment="Center" VerticalAlignment="Top" Stretch="UniformToFill" />
                         </Border>
-                        <Image Source="{Binding Scope, IsAsync=True, TargetNullValue={x:Null}}" HorizontalAlignment="Center" VerticalAlignment="Top" Stretch="UniformToFill" MaxWidth="1280" MaxHeight="720" />
+                        <Image Name="ScopePreview" Tag="ScopePreview" Source="{Binding Scope, IsAsync=True, TargetNullValue={x:Null}}" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Top" Stretch="UniformToFill" MaxWidth="1280" MaxHeight="720" />
                         <Border BorderThickness="1,0,1,1">
                             <TextBlock Text="{Binding name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="Auto" Height="Auto" Style="{StaticResource TextBlock}" />
                         </Border>
@@ -192,9 +201,6 @@
                                 </UniformGrid>
                             </UniformGrid>
                         </Border>
-                        <Border BorderThickness="1,0,1,1" Style="{StaticResource DebugBorder}">
-                            <TextBlock Text="{Binding DescriptorName}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="Auto" Height="Auto" Style="{StaticResource TextBlock}" />
-                        </Border>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -208,59 +214,59 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryMuzzleImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryMuzzleImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,166,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryBarrelImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryBarrelImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="148,232,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryMagazineImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryMagazineImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,100,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryScopeImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryScopeImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="286,100,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Center" Source="{Binding MiniCrosshair}" Name="PrimaryCrosshairImage" VerticalAlignment="Top" Stretch="UniformToFill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Center" Source="{Binding MiniScope, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryCrosshairImage" VerticalAlignment="Top" Stretch="UniformToFill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="133" HorizontalAlignment="Left" Margin="148,166,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding WideImage}" Name="PrimaryRecieverImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public" />
+                        <Image HorizontalAlignment="Left" Source="{Binding WideImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryRecieverImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public" />
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="286,166,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryStockImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryStockImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,232,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryTagImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryTagImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,232,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PrimaryCamoWeaponImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PrimaryCamoWeaponImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
 
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="10,466,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryMuzzleImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryMuzzleImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,466,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryBarrelImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryBarrelImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="148,532,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryMagazineImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryMagazineImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,400,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryScopeImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryScopeImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="286,400,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Center" Source="{Binding MiniCrosshair}" Name="SecondaryCrosshairImage" VerticalAlignment="Top" Stretch="UniformToFill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Center" Source="{Binding MiniScope, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryCrosshairImage" VerticalAlignment="Top" Stretch="UniformToFill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="133" HorizontalAlignment="Left" Margin="148,466,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding WideImage}" Name="SecondaryRecieverImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding WideImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryRecieverImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="286,466,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryStockImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryStockImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,532,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryTagImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryTagImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,532,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="SecondaryCamoWeaponImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="SecondaryCamoWeaponImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
 
 
@@ -334,7 +340,7 @@
 
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="10,734,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
                         <Grid>
-                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" x:Name="GearImage1" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" x:Name="GearImage1" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                             <Rectangle Width="64" Height="64" Name="Gear1Rect">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="#77000000"/>
@@ -344,7 +350,7 @@
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,734,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
                         <Grid>
-                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" x:Name="GearImage2" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" x:Name="GearImage2" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                             <Rectangle Width="64" Height="64" Name="Gear2Rect">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="#77000000"/>
@@ -354,7 +360,7 @@
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="148,734,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
                         <Grid>
-                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" x:Name="GearImage3" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" x:Name="GearImage3" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                             <Rectangle Width="64" Height="64" Name="Gear3Rect">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="#77000000"/>
@@ -364,7 +370,7 @@
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,734,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
                         <Grid>
-                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" x:Name="GearImage4" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                            <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" x:Name="GearImage4" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                             <Rectangle Width="64" Height="64" Name="Gear4Rect">
                                 <Rectangle.Fill>
                                     <SolidColorBrush Color="#77000000"/>
@@ -373,20 +379,20 @@
                         </Grid>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="286,734,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" x:Name="TacticalImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" x:Name="TacticalImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
 
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="10,834,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="HelmetImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="HelmetImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="79,834,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="UpperBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="UpperBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="148,834,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="LowerBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="LowerBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
                     <Border Height="64" Width="64" HorizontalAlignment="Left" Margin="217,834,0,0" VerticalAlignment="Top" AllowDrop="True" DragEnter="Image_DragEnter" Drop="Image_Drop" MouseUp="Image_MouseUp">
-                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage}" Name="PlayerCamoBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
+                        <Image HorizontalAlignment="Left" Source="{Binding SmallSquareImage, IsAsync=True, TargetNullValue={x:Null}}" Name="PlayerCamoBodyImage" VerticalAlignment="Top" Stretch="Fill" ToolTip="{Binding tooltip}" x:FieldModifier="public"/>
                     </Border>
 
                     <Label Name="PrimaryDescriptorLabel" Content="Here goes the Weapon Name" HorizontalAlignment="Left" Margin="10,135,0,0" VerticalAlignment="Top" Style="{StaticResource DescriptorLabel}"/>

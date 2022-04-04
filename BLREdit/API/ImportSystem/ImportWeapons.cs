@@ -17,18 +17,11 @@ namespace BLREdit
 
         public WikiStats[] GetWikiStats()
         {
-            List<WikiStats> stats = new List<WikiStats>();
+            List<WikiStats> stats = new();
             stats.AddRange(ImportSystem.GetWikiStats(depot));
             stats.AddRange(ImportSystem.GetWikiStats(primary));
             stats.AddRange(ImportSystem.GetWikiStats(secondary));
             return stats.ToArray();
-        }
-
-        public void UpdateImages()
-        {
-            ImportSystem.UpdateImagesForImportItems(depot);
-            ImportSystem.UpdateImagesForImportItems(primary);
-            ImportSystem.UpdateImagesForImportItems(secondary);
         }
 
         public ImportWeapons() { }

@@ -24,13 +24,13 @@ namespace BLREdit
             {
                 var response = await Client.GetAsync(
                     $"api/players/all");
-                LoggingSystem.LogInfo(response.RequestMessage.ToString());
-                LoggingSystem.LogInfo(response.ReasonPhrase);
+                LoggingSystem.Log(response.RequestMessage.ToString());
+                LoggingSystem.Log(response.ReasonPhrase);
                 return await ConvertMessageBodyToProfiles(response);
             }
             catch(Exception error)
             {
-                LoggingSystem.LogError("GetAllPlayers Failed:\n"+error.ToString());
+                LoggingSystem.Log("GetAllPlayers Failed:\n"+error.ToString(), LogTypes.Error);
                 return null;
             }
         }
@@ -45,7 +45,7 @@ namespace BLREdit
             }
             catch (Exception error)
             {
-                LoggingSystem.LogError("GetOwnedPlayer Failed:\n" + error.ToString());
+                LoggingSystem.Log("GetOwnedPlayer Failed:\n" + error.ToString(), LogTypes.Error);
                 return null;
             }
         }
@@ -67,7 +67,7 @@ namespace BLREdit
             }
             catch (Exception error)
             {
-                LoggingSystem.LogError("GetOwnedPlayer Failed:\n" + error.ToString());
+                LoggingSystem.Log("GetOwnedPlayer Failed:\n" + error.ToString(), LogTypes.Error);
                 return null;
             }
         }
@@ -85,13 +85,13 @@ namespace BLREdit
                 }
                 else
                 {
-                    LoggingSystem.LogError(player.PlayerName + await response.Content.ReadAsStringAsync());
+                    LoggingSystem.Log(player.PlayerName + await response.Content.ReadAsStringAsync(), LogTypes.Error);
                     return false;
                 }
             }
             catch(Exception error)
             {
-                LoggingSystem.LogError(player.PlayerName + " update failed Timeout or other Exception:\n" + error.ToString());
+                LoggingSystem.Log(player.PlayerName + " update failed Timeout or other Exception:\n" + error.ToString(), LogTypes.Error);
                 return false;
             }
         }
@@ -107,7 +107,7 @@ namespace BLREdit
             }
             catch (Exception error)
             {
-                LoggingSystem.LogError("GetOwnedPlayer Failed:\n" + error.ToString());
+                LoggingSystem.Log("GetOwnedPlayer Failed:\n" + error.ToString(), LogTypes.Error);
                 return false;
             }
         }
@@ -121,7 +121,7 @@ namespace BLREdit
             }
             else
             {
-                LoggingSystem.LogError(response.Headers.ToString() +  "Request failed with code:" + response.StatusCode.ToString());
+                LoggingSystem.Log(response.Headers.ToString() +  "Request failed with code:" + response.StatusCode.ToString(), LogTypes.Error);
                 return null;
             }
         }
@@ -135,7 +135,7 @@ namespace BLREdit
             }
             else
             {
-                LoggingSystem.LogError(response.Headers.ToString() + "Request failed with code:" + response.StatusCode.ToString());
+                LoggingSystem.Log(response.Headers.ToString() + "Request failed with code:" + response.StatusCode.ToString(), LogTypes.Error);
                 return null;
             }
         }

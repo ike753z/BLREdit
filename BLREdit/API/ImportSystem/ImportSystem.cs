@@ -13,7 +13,7 @@ namespace BLREdit
     {
         private static bool AddFolderLine = AppDomain.CurrentDomain.BaseDirectory.EndsWith("\\");
 
-        public static readonly Dictionary<float, float> DamagePercentToValue = new Dictionary<float, float>();
+        public static readonly Dictionary<float, float> DamagePercentToValue = new();
 
         //public static readonly FoxIcon[] Icons = LoadAllIcons();
         //public static readonly FoxIcon[] Crosshairs = LoadAllCrosshairs();
@@ -31,22 +31,20 @@ namespace BLREdit
 
         public static void Initialize()
         {
-            var watch = LoggingSystem.LogInfo("Initializing Import System");
+            var watch = LoggingSystem.Log("Initializing Import System");
 
             CleanItems();
-            var timer = LoggingSystem.LogInfo("Image Cache Creation: ", "");
             CreateImageCache();
-            LoggingSystem.LogInfoAppend(timer);
             //UpdateImages();
             LoadWikiStats();
             LoadIniStats();
 
             //UpgradeIniStats();
 
-            LoggingSystem.LogInfo("BodyCamoCount:" + Mods.camosBody.Length);
+            //LoggingSystem.Log("BodyCamoCount:" + Mods.camosBody.Length);
             //LoggingSystem.LogInfo("WeaponCamoCount:" + Mods.camosWeapon.Length);
 
-            LoggingSystem.LogInfoAppend(watch, "Import System");
+            LoggingSystem.Append(watch, "Import System");
         }
 
 #pragma warning disable IDE0051 // Remove unused private members
@@ -54,13 +52,6 @@ namespace BLREdit
 #pragma warning restore IDE0051 // Remove unused private members
         {
             IOResources.SerializeFile<IniStats[]>("upgraded.json", IniItemStats);
-        }
-
-        private static void UpdateImages()
-        {
-            Gear.UpdateImages();
-            Mods.UpdateImages();
-            Weapons.UpdateImages();
         }
 
         private static void CleanItems()
@@ -72,8 +63,8 @@ namespace BLREdit
 
         public static ImportItem[] CleanItems(ImportItem[] importItems, string categoryName)
         {
-            var watch = LoggingSystem.LogInfo("Started Cleaning " + categoryName, "");
-            List<ImportItem> cleanedItems = new List<ImportItem>();
+            var watch = LoggingSystem.Log("Started Cleaning " + categoryName, LogTypes.Timing, "");
+            List<ImportItem> cleanedItems = new();
             foreach (ImportItem item in importItems)
             {
                 if (IsValidItem(item))
@@ -120,7 +111,7 @@ namespace BLREdit
                     cleanedItems.Add(item);
                 }
             }
-            LoggingSystem.LogInfoAppend(watch, " items:" + cleanedItems.Count + " are Left");
+            LoggingSystem.Append(watch, " items:" + cleanedItems.Count + " are Left");
             return cleanedItems.ToArray();
         }
 
@@ -141,7 +132,7 @@ namespace BLREdit
 
         public static IniStats[] GetFromWeapons(ImportItem[] items1, ImportItem[] items2)
         {
-            List<IniStats> stats = new List<IniStats>();
+            List<IniStats> stats = new();
             foreach (ImportItem item in items1)
             {
                 if (item.IniStats != null)
@@ -194,7 +185,7 @@ namespace BLREdit
                 }
                 if (!found)
                 {
-                    LoggingSystem.LogInfo("No IniStats for " + item.name);
+                    LoggingSystem.Log("No IniStats for " + item.name);
                 }
             }
         }
@@ -281,10 +272,6 @@ namespace BLREdit
                         found = true;
                     }
                 }
-                //if (!found)
-                //{
-                //    LoggingSystem.LogInfo("No Wiki Stats for " + item.name);
-                //}
             }
         }
 
@@ -297,7 +284,7 @@ namespace BLREdit
 
         internal static void GenerateWikiStats()
         {
-            List<WikiStats> stats = new List<WikiStats>();
+            List<WikiStats> stats = new();
 
             stats.AddRange(Gear.GetWikiStats());
             stats.AddRange(Mods.GetWikiStats());
@@ -306,7 +293,7 @@ namespace BLREdit
 
         internal static WikiStats[] GetWikiStats(ImportItem[] items)
         {
-            List<WikiStats> stats = new List<WikiStats>();
+            List<WikiStats> stats = new();
             foreach (var item in items)
             {
                 stats.Add(item.WikiStats);
@@ -316,8 +303,8 @@ namespace BLREdit
 
         internal static WikiStats[] LoadWikiStatsFromCSV()
         {
-            List<WikiStats> stats = new List<WikiStats>();
-            StreamReader sr = new StreamReader(IOResources.ASSET_DIR + "\\BLR Wiki Stats.csv");
+            List<WikiStats> stats = new();
+            StreamReader sr = new(IOResources.ASSET_DIR + "\\BLR Wiki Stats.csv");
             string line;
             while ((line = sr.ReadLine()) != null)
             {
@@ -347,32 +334,11 @@ namespace BLREdit
             return stats.ToArray();
         }
 
-        internal static void UpdateImagesForImportItems(ImportItem[] items)
-        {
-            
-            return;
-            
-            //if (items.Length > 0)
-            //{
-            //    var watch = LoggingSystem.LogInfo("Updating Images for " + items[0].Category, "");
-
-            //    Parallel.ForEach(items, item =>
-            //    {
-            //        item.LoadImage();
-            //        item.wideImageMale.Freeze();
-            //        item.wideImageFemale?.Freeze();
-            //        item.largeSquareImageMale.Freeze();
-            //        item.largeSquareImageFemale?.Freeze();
-            //        item.smallSquareImageMale.Freeze();
-            //        item.smallSquareImageFemale?.Freeze();
-            //    });
-            //    LoggingSystem.LogInfoAppend(watch);
-            //}
-        }
-
         internal static void CreateImageCache()
         {
             if (Directory.Exists("Cache\\")) return;
+
+            var timer = LoggingSystem.Log("Image Cache Creation: ", LogTypes.Timing, "");
 
             Directory.CreateDirectory("Cache\\wide\\");
             Directory.CreateDirectory("Cache\\genderWide\\");
@@ -382,7 +348,7 @@ namespace BLREdit
             Directory.CreateDirectory("Cache\\previewLarge\\");
             Directory.CreateDirectory("Cache\\previewSmall\\");
 
-            List<ImportItem> allUsedItems = new List<ImportItem>();
+            List<ImportItem> allUsedItems = new();
             allUsedItems.AddRange(Weapons.primary);
             allUsedItems.AddRange(Weapons.secondary);
             allUsedItems.AddRange(Mods.muzzles);
@@ -399,42 +365,9 @@ namespace BLREdit
             allUsedItems.AddRange(Gear.attachments);
             allUsedItems.AddRange(Gear.tactical);
 
-            foreach(ImportItem o in allUsedItems)
-            {
-                //LoggingSystem.LogInfo("[Cache]:" + o.icon + ".png");
-                ImgCache.CreateImageChacheForItem(o);
-            }
-        }
-
-        private static FoxIcon[] LoadAllIcons()
-        {
-            var watch = LoggingSystem.LogInfo("Loading All Icons", "");
-            var icons = new List<FoxIcon>();
-            foreach (var icon in Directory.GetFiles("Assets\\textures"))
-            {
-                if (icon.StartsWith("\\"))
-                {
-                    icons.Add(new FoxIcon(icon));
-                }
-                else
-                {
-                    icons.Add(new FoxIcon("\\" + icon));
-                }
-            }
-
-            LoggingSystem.LogInfoAppend(watch);
-            return icons.ToArray();
-        }
-        private static FoxIcon[] LoadAllCrosshairs()
-        {
-            var watch = LoggingSystem.LogInfo("Loading All Crosshairs", "");
-            var icons = new List<FoxIcon>();
-            foreach (var icon in Directory.EnumerateFiles("Assets\\crosshairs"))
-            {
-                icons.Add(new FoxIcon(icon));
-            }
-            LoggingSystem.LogInfoAppend(watch);
-            return icons.ToArray();
+            BLREdit.UI.ProgressBar bar = new UI.ProgressBar(allUsedItems);
+            bar.ShowDialog();
+            LoggingSystem.Append(timer);
         }
 
 

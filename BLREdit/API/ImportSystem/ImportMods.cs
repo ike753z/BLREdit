@@ -28,28 +28,13 @@ namespace BLREdit
 
         public WikiStats[] GetWikiStats()
         {
-            List<WikiStats> stats = new List<WikiStats>();
+            List<WikiStats> stats = new();
             stats.AddRange(ImportSystem.GetWikiStats(barrels));
             stats.AddRange(ImportSystem.GetWikiStats(magazines));
             stats.AddRange(ImportSystem.GetWikiStats(muzzles));
             stats.AddRange(ImportSystem.GetWikiStats(scopes));
             stats.AddRange(ImportSystem.GetWikiStats(stocks));
             return stats.ToArray();
-        }
-
-        public void UpdateImages()
-        {
-            ImportSystem.UpdateImagesForImportItems(ammo);
-            ImportSystem.UpdateImagesForImportItems(ammos);
-            ImportSystem.UpdateImagesForImportItems(barrels);
-            ImportSystem.UpdateImagesForImportItems(camosBody);
-            //ImportSystem.UpdateImagesForImportItems(camosWeapon, "camoWeapon");
-            ImportSystem.UpdateImagesForImportItems(grips);
-            ImportSystem.UpdateImagesForImportItems(magazines);
-            ImportSystem.UpdateImagesForImportItems(muzzles);
-            ImportSystem.UpdateImagesForImportItems(primarySkins);
-            ImportSystem.UpdateImagesForImportItems(scopes);
-            ImportSystem.UpdateImagesForImportItems(stocks);
         }
 
         public ImportMods() { }

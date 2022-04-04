@@ -14,6 +14,7 @@ namespace BLREdit
         public static bool IsNewVersionAvailable { get; private set; } = false;
         public static bool IsBaseRuntimeMissing { get; private set; } = true;
         public static bool IsUpdateRuntimeMissing { get; private set; } = true;
+        public static BLREditSettings Settings { get; private set; } = BLREditSettings.LoadSettings();
 
         public App()
         {
@@ -22,17 +23,16 @@ namespace BLREdit
 
             //TestREST().GetAwaiter().GetResult();
 
-            LoggingSystem.LogInfo("BLREdit Starting!");
+            LoggingSystem.Log("BLREdit Starting!");
             VersionCheck();
-            ImportSystem.Initialize();
         }
 
-        public async Task TestREST()
+        public static async Task TestREST()
         {
             MagiCowsProfile[] profiles = await MagiCowClient.GetAllPlayers();
             foreach (MagiCowsProfile profile in profiles)
             {
-                LoggingSystem.LogInfo(profile.ToString());
+                LoggingSystem.Log(profile.ToString());
             }
         }
 
@@ -44,11 +44,11 @@ namespace BLREdit
         {
             try
             {
-                GitHubClient client = new GitHubClient(new ProductHeaderValue("BLREdit"));
+                GitHubClient client = new(new ProductHeaderValue("BLREdit"));
                 var releases = client.Repository.Release.GetAll(CurrentOwner, CurrentRepo);
                 releases.Wait();
                 var latest = releases.Result[0];
-                LoggingSystem.LogInfo("Newest Version: " + latest.TagName + " of " + latest.Name + " vs Current: " + CurrentVersion + " of " + CurrentVersionName);
+                LoggingSystem.Log("Newest Version: " + latest.TagName + " of " + latest.Name + " vs Current: " + CurrentVersion + " of " + CurrentVersionName);
 
                 string[] remoteVersionParts = latest.TagName.Split('v');
                 remoteVersionParts = remoteVersionParts[remoteVersionParts.Length - 1].Split('.');
@@ -67,7 +67,7 @@ namespace BLREdit
                     }
                     catch
                     {
-                        LoggingSystem.LogWarning("Can't determine version differences!");
+                        LoggingSystem.Log("Can't determine version differences!", LogTypes.Warning);
                     }
                     if (remote != null && current != null)
                     {
@@ -83,13 +83,13 @@ namespace BLREdit
                     }
                     else
                     {
-                        LoggingSystem.LogWarning("Can't determine version differences!");
+                        LoggingSystem.Log("Can't determine version differences!", LogTypes.Warning);
                     }
                 }
 
             }
             catch 
-            { LoggingSystem.LogWarning("Can't connect to github to check for new Version"); }
+            { LoggingSystem.Log("Can't connect to github to check for new Version", LogTypes.Warning); }
         }
 
         public static void RuntimeCheck(bool force)
@@ -100,7 +100,7 @@ namespace BLREdit
             {
                 if ((VC32Bit == "11.0.61030.0" && VC32BitUpdate4 == "11.0.61030") && !force)
                 {
-                    LoggingSystem.LogInfo("Both VC++ 2012 Runtimes are installed for BLRevive!");
+                    LoggingSystem.Log("Both VC++ 2012 Runtimes are installed for BLRevive!");
                     return;
                 }
                 else

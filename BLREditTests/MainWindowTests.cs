@@ -20,8 +20,6 @@ namespace BLREditTests
         {
             app = new App();
 
-            LoggingSystem.LogInfo(context.ToString());
-
             app.InitializeComponent();
         }
 

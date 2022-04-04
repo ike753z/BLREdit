@@ -11,12 +11,12 @@ namespace BLREdit
         public string _class { get; set; }
 
         public string icon { get; set; }
-        public Uri WideImage { get; set; }
-        public Uri FemaleWide { get; set; }
-        public Uri SmallSquareImage { get; set; }
-        public Uri FemaleSmall { get; set; }
-        public Uri Scope { get; set; }
-        public Uri MiniScope { get; set; }
+        public Uri? WideImage { get; set; }
+        public Uri? FemaleWide { get; set; }
+        public Uri? SmallSquareImage { get; set; }
+        public Uri? FemaleSmall { get; set; }
+        public Uri? Scope { get; set; }
+        public Uri? MiniScope { get; set; }
 
         public string name { get; set; }
         public string descriptorName { get; set; } = "";
@@ -751,8 +751,9 @@ namespace BLREdit
 
 
 
-                    List<ImportItem> items = new List<ImportItem>
-                    { this,
+                    List<ImportItem> items = new()
+                    { 
+                        this,
                         defaultBarrel,
                         defaultWeapon.GetMagazine(),
                         defaultWeapon.GetMuzzle(),
@@ -822,7 +823,7 @@ namespace BLREdit
                             break;
                     }
 
-                    List<ImportItem> items = new List<ImportItem>
+                    List<ImportItem> items = new()
                     { 
                         defaultReciever,
                         defaultBarrel,
@@ -848,7 +849,7 @@ namespace BLREdit
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.AppendFormat("[Class={0}, Icon={1}, Name={2}, PawnModifiers={3}, Tooltip={4}, UID={5}, ValidFor={6}, WeaponModifiers={7}, SupportedMods={8}, Stats={9}]", _class, icon, name, pawnModifiers, tooltip, uid, PrintIntArray(validFor), weaponModifiers, PrintStringArray(supportedMods), stats);
             return sb.ToString();
         }
@@ -959,85 +960,6 @@ namespace BLREdit
             return false;
         }
 
-
-
-        //public void LoadImage()
-        //{
-        //    bool male = false;
-        //    if (!string.IsNullOrEmpty(icon))
-        //    {
-        //        foreach (FoxIcon foxicon in ImportSystem.Icons)
-        //        {
-        //            if (foxicon.Name == icon)
-        //            {
-        //                wideImageMale = foxicon.GetWideImage();
-        //                largeSquareImageMale = foxicon.GetLargeSquareImage();
-        //                smallSquareImageMale = foxicon.GetSmallSquareImage();
-        //                male = true;
-        //            }
-        //            if (foxicon.Name == GetFemaleIconName())
-        //            {
-        //                wideImageFemale = foxicon.GetWideImage();
-        //                largeSquareImageFemale = foxicon.GetLargeSquareImage();
-        //                smallSquareImageFemale = foxicon.GetSmallSquareImage();
-        //            }
-        //        }
-        //    }
-        //    if (!male)
-        //    {
-        //        wideImageMale = FoxIcon.CreateEmptyBitmap(256, 128);
-        //        largeSquareImageMale = FoxIcon.CreateEmptyBitmap(128, 128);
-        //        smallSquareImageMale = FoxIcon.CreateEmptyBitmap(64, 64);
-        //    }
-        //}
-
-        private string GetFemaleIconName()
-        {
-            string[] parts = icon.Split('_');
-            string female = "";
-            for (int i = 0; i < parts.Length; i++)
-            {
-                if (i == parts.Length - 1)
-                {
-                    female += "_Female";
-                }
-                if (i == 0)
-                {
-                    female += parts[i];
-                }
-                else
-                {
-                    female += "_" + parts[i];
-                }
-            }
-            return female;
-        }
-
-        public void LoadCrosshair()
-        {
-            //Scope = GetBitmapCrosshair(name);
-        }
-
-        public void RemoveCrosshair()
-        {
-            //Scope = null;
-        }
-
-        //public static BitmapSource GetBitmapCrosshair(string name)
-        //{
-        //    if (!string.IsNullOrEmpty(name))
-        //    {
-        //        foreach (FoxIcon icon in ImportSystem.Crosshairs)
-        //        {
-        //            if (icon.Name.Equals(name))
-        //            {
-        //                return new BitmapImage(icon.Icon);
-        //            }
-        //        }
-        //    }
-        //    return FoxIcon.CreateEmptyBitmap(1, 1);
-        //}
-
         private static string PrintIntArray(int[] ints)
         {
             string array = "[";
@@ -1063,17 +985,5 @@ namespace BLREdit
             }
             return array + ']';
         }
-
-        //internal void PrepareImages()
-        //{
-        //    wideImageMale = wideImageMale?.Clone();
-        //    wideImageFemale = wideImageFemale?.Clone();
-
-        //    largeSquareImageMale = largeSquareImageMale?.Clone();
-        //    largeSquareImageFemale = largeSquareImageFemale?.Clone();
-
-        //    smallSquareImageMale = smallSquareImageMale?.Clone();
-        //    smallSquareImageFemale = smallSquareImageFemale?.Clone();
-        //}
     }
 }
