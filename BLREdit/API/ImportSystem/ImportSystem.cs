@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BLREdit
@@ -364,7 +365,9 @@ namespace BLREdit
             allUsedItems.AddRange(Gear.attachments);
             allUsedItems.AddRange(Gear.tactical);
 
-            BLREdit.UI.ProgressBar bar = new UI.ProgressBar(allUsedItems);
+            var deduplicated = allUsedItems.GroupBy(x => x.icon).Select(x => x.First()).ToList();
+
+            BLREdit.UI.ProgressBar bar = new UI.ProgressBar(deduplicated);
             bar.ShowDialog();
             LoggingSystem.Append(timer);
         }

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace BLREdit.UI
 {
@@ -47,10 +48,8 @@ namespace BLREdit.UI
 			int progress = 0;
 
 			ThreadPool.GetMinThreads(out int minT, out int minIO);
-			ThreadPool.GetMaxThreads(out int maxT, out int maxIO);
 
-			ThreadPool.SetMaxThreads(800, 800);
-			ThreadPool.SetMinThreads(800, 800);
+			ThreadPool.SetMinThreads(64, 16);
 
 			Parallel.For(0, items.Count, (i) =>
 			{
@@ -59,22 +58,22 @@ namespace BLREdit.UI
 				(sender as BackgroundWorker).ReportProgress(progress);
 			});
 
-			ThreadPool.SetMaxThreads(maxT, maxIO);
 			ThreadPool.SetMinThreads(minT, minIO);
+
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
+				DialogResult = true;
+			}));
 		}
 
 		void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			pbStatus.Value = e.ProgressPercentage;
-			if (pbStatus.Value >= pbStatus.Maximum)
-			{
-				DialogResult = true;
-			}
+
 		}
 
 		private void OnClosing(object sender, CancelEventArgs e)
 		{
-			if (pbStatus.Value < pbStatus.Maximum)
+			if (!DialogResult ?? true)
 			{
 				e.Cancel = true;
 			}

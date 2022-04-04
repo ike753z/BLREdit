@@ -12,15 +12,43 @@ namespace BLREdit
 
         public string icon { get; set; }
 
-        
-        public Uri? WideImage { get; set; }
+        public Uri? WideImage
+        {
+            get
+            {
+                if ((Category == "upperBody" || Category == "lowerBody") && (UI.MainWindow.self?.IsFemaleChecked ?? false))
+                {
+                    return FemaleWide;
+                }
+                else
+                {
+                    return MaleWide;
+                }
+            }
+        }
+        //public Uri? WideImage { get { if (UI.MainWindow.self?.IsFemaleCheckBox?.IsChecked ?? false) { return MaleWide; } else { return FemaleSmall; } } }
         public Uri? MaleWide { get; set; }
         public Uri? FemaleWide { get; set; }
-        
 
-        public Uri? SmallSquareImage { get; set; }
+        public Uri? SmallSquareImage
+        {
+            get
+            {
+                if ((Category == "upperBody" || Category == "lowerBody") && (UI.MainWindow.self?.IsFemaleChecked ?? false))
+                {
+                    return FemaleSmall;
+                }
+                else
+                {
+                    return MaleSmall;
+                }
+            }
+        }
+        //public Uri? SmallSquareImage { get { if (UI.MainWindow.self?.IsFemaleCheckBox?.IsChecked ?? false) { return MaleSmall; } else { return FemaleSmall; } } }
         public Uri? MaleSmall { get; set; }
         public Uri? FemaleSmall { get; set; }
+
+
         public Uri? Scope { get; set; }
         public Uri? MiniScope { get; set; }
 

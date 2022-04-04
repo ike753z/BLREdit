@@ -52,6 +52,8 @@ namespace BLREdit.UI
 
         public static MainWindow self = null;
 
+        public bool IsFemaleChecked { get; private set; } = false;
+
         public MainWindow()
         {
             self = this;
@@ -1657,6 +1659,7 @@ namespace BLREdit.UI
 
         private void IsFemaleCheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            IsFemaleChecked = true;
             //Update upper body armor image
             if (UpperBodyImage.DataContext is ImportItem upper)
             {
@@ -1678,6 +1681,7 @@ namespace BLREdit.UI
 
         private void IsFemaleCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
+            IsFemaleChecked = false;
             //Update upper body armor image
             if (UpperBodyImage.DataContext is ImportItem upper)
             {
