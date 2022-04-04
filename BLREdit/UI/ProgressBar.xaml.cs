@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,11 +44,23 @@ namespace BLREdit.UI
 
 		void worker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			for(int i = 0; i < items.Count; i++)
+			int progress = 0;
+
+			ThreadPool.GetMinThreads(out int minT, out int minIO);
+			ThreadPool.GetMaxThreads(out int maxT, out int maxIO);
+
+			ThreadPool.SetMaxThreads(800, 800);
+			ThreadPool.SetMinThreads(800, 800);
+
+			Parallel.For(0, items.Count, (i) =>
 			{
 				ImgCache.CreateImageChacheForItem(items[i]);
-				(sender as BackgroundWorker).ReportProgress(i);
-			}
+				Interlocked.Increment(ref progress);
+				(sender as BackgroundWorker).ReportProgress(progress);
+			});
+
+			ThreadPool.SetMaxThreads(maxT, maxIO);
+			ThreadPool.SetMinThreads(minT, minIO);
 		}
 
 		void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)

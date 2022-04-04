@@ -87,41 +87,46 @@ namespace BLREdit.API.Utils
             Scope.CacheOption = BitmapCacheOption.OnLoad;
 
 
-            try
+            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + item.icon + ".png", UriKind.Absolute)).Result)
             {
-                var icon = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/textures/" + item.icon + ".png", UriKind.Absolute));
-
-                Icon.StreamSource = new MemoryStream(icon.Result);
-                Icon.EndInit();
-                Icon.Freeze();
-            }
-            catch (Exception error)
-            {
-                Icon = null;
-            }
-
-            try
-            {
-                var female = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/textures/" + GetFemaleIconName(item) + ".png", UriKind.Absolute));
-                Female.StreamSource = new MemoryStream(female.Result);
-                Female.EndInit();
-                Female.Freeze();
-            }
-            catch (Exception error)
-            {
-                Female = null;
+                if (response.IsSuccessStatusCode)
+                {
+                    Icon.StreamSource = response.Content.ReadAsStreamAsync().Result;
+                    Icon.EndInit();
+                    Icon.Freeze();
+                }
+                else
+                {
+                    Icon = null;
+                }
             }
 
-            try
+            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + GetFemaleIconName(item) + ".png", UriKind.Absolute)).Result)
             {
-                var scope = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/crosshairs/" + item.name + ".png", UriKind.Absolute));
-                Scope.StreamSource = new MemoryStream(scope.Result);
-                Scope.EndInit();
-                Scope.Freeze();
+                if (response.IsSuccessStatusCode)
+                {
+                    Female.StreamSource = response.Content.ReadAsStreamAsync().Result;
+                    Female.EndInit();
+                    Female.Freeze();
+                }
+                else
+                {
+                    Female = null;
+                }
             }
-            catch (Exception error)
+
+            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/crosshairs/" + item.name + ".png", UriKind.Absolute)).Result)
             {
-                Scope = null;
+                if (response.IsSuccessStatusCode)
+                {
+                    Scope.StreamSource = response.Content.ReadAsStreamAsync().Result;
+                    Scope.EndInit();
+                    Scope.Freeze();
+                }
+                else
+                {
+                    Scope = null;
+                }
             }
 
             CreateCacheImage(Icon, item.MaleWide, WideEmpty.Clone());
