@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -19,6 +21,8 @@ namespace BLREdit.API.Utils
         private const int LargeSquareImageWidth = 128;
         private const int SmallSquareImageWidth = 64;
 
+
+        static HttpClient client = new HttpClient();
 
         public static readonly BitmapImage WideEmpty = CreateEmptyBitmap(WideImageWidth, WideImageHeight);
         private static readonly BitmapImage Preview = CreateEmptyBitmap(1280, 720);
@@ -57,25 +61,71 @@ namespace BLREdit.API.Utils
 
         public static void CreateImageChacheForItem(ImportItem item)
         {
-            Uri Icon;
-            Uri Female;
-            Uri Scope;
+            //if (!AddFolderLine)
+            //{
+            //    Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
+            //    Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
+            //    Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
+            //}
+            //else
+            //{
+            //    Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
+            //    Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
+            //    Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
+            //}
 
-            if (!AddFolderLine)
+            var Icon = new BitmapImage(); //Load the actual image we want to draw
+            Icon.BeginInit();
+            Icon.CacheOption = BitmapCacheOption.OnLoad;
+
+            var Female = new BitmapImage(); //Load the actual image we want to draw
+            Female.BeginInit();
+            Female.CacheOption = BitmapCacheOption.OnLoad;
+
+            var Scope = new BitmapImage(); //Load the actual image we want to draw
+            Scope.BeginInit();
+            Scope.CacheOption = BitmapCacheOption.OnLoad;
+
+
+            try
             {
-                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
-                Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
-                Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
+                var icon = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/textures/" + item.icon + ".png", UriKind.Absolute));
+
+                Icon.StreamSource = new MemoryStream(icon.Result);
+                Icon.EndInit();
+                Icon.Freeze();
             }
-            else
+            catch (Exception error)
             {
-                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
-                Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
-                Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
+                Icon = null;
             }
 
-            CreateCacheImage(Icon, item.WideImage, WideEmpty.Clone());
-            CreateCacheImage(Icon, item.SmallSquareImage, SmallSquareEmpty.Clone());
+            try
+            {
+                var female = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/textures/" + GetFemaleIconName(item) + ".png", UriKind.Absolute));
+                Female.StreamSource = new MemoryStream(female.Result);
+                Female.EndInit();
+                Female.Freeze();
+            }
+            catch (Exception error)
+            {
+                Female = null;
+            }
+
+            try
+            {
+                var scope = client.GetByteArrayAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/master/BLREdit/Assets/crosshairs/" + item.name + ".png", UriKind.Absolute));
+                Scope.StreamSource = new MemoryStream(scope.Result);
+                Scope.EndInit();
+                Scope.Freeze();
+            }
+            catch (Exception error)
+            {
+                Scope = null;
+            }
+
+            CreateCacheImage(Icon, item.MaleWide, WideEmpty.Clone());
+            CreateCacheImage(Icon, item.MaleSmall, SmallSquareEmpty.Clone());
             //CreateCacheImage(Icon, item.LargeSquareImage, LargeSquareEmpty.Clone());
 
             if (item.Category == "upperBody" || item.Category == "lowerBody")
@@ -91,10 +141,10 @@ namespace BLREdit.API.Utils
             }
         }
 
-        private static void CreateCacheImage(Uri source, Uri target, BitmapImage background)
+        private static void CreateCacheImage(BitmapImage source, Uri target, BitmapImage background)
         {
             PngBitmapEncoder encoder = new();
-            if (!File.Exists(source.LocalPath))
+            if (source == null)
             {
                 encoder.Frames.Add(BitmapFrame.Create(background));
             }
@@ -109,7 +159,7 @@ namespace BLREdit.API.Utils
         }
 
 
-        private static BitmapSource CombineImage(Uri source, BitmapImage empty, bool Uniform = true)
+        private static BitmapSource CombineImage(BitmapImage source, BitmapImage empty, bool Uniform = true)
         {
             DrawingGroup group = new();
 
@@ -121,12 +171,12 @@ namespace BLREdit.API.Utils
             };
             group.Children.Add(baseImage);
 
-            var tmp = new BitmapImage(source); //Load the actual image we want to draw
+
 
             ImageDrawing actualImage = new()
             {
-                Rect = CreateRectForImage(empty.Width, empty.Height, tmp.PixelWidth, tmp.PixelHeight, Uniform),
-                ImageSource = tmp
+                Rect = CreateRectForImage(empty.Width, empty.Height, source.PixelWidth, source.PixelHeight, Uniform),
+                ImageSource = source
             };
             group.Children.Add(actualImage);
 

@@ -34,7 +34,6 @@ namespace BLREdit
             var watch = LoggingSystem.Log("Initializing Import System");
 
             CleanItems();
-            CreateImageCache();
             //UpdateImages();
             LoadWikiStats();
             LoadIniStats();
@@ -73,9 +72,10 @@ namespace BLREdit
 
                     if (!AddFolderLine)
                     {
-                        item.WideImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.MaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.MaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
+
                         item.FemaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "genderWide\\" + item.icon + ".png", UriKind.Absolute);
-                        item.SmallSquareImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
                         item.FemaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "genderSmall\\" + item.icon + ".png", UriKind.Absolute);
                         if (categoryName == "scope")
                         {
@@ -90,9 +90,10 @@ namespace BLREdit
                     }
                     else
                     {
-                        item.WideImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.MaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.MaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
+
                         item.FemaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "genderWide\\" + item.icon + ".png", UriKind.Absolute);
-                        item.SmallSquareImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
                         item.FemaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "genderSmall\\" + item.icon + ".png", UriKind.Absolute);
                         if (categoryName == "scope")
                         {
@@ -105,8 +106,6 @@ namespace BLREdit
                             item.MiniScope = null;
                         }
                     }
-
-                    
 
                     cleanedItems.Add(item);
                 }
@@ -343,7 +342,7 @@ namespace BLREdit
             Directory.CreateDirectory("Cache\\wide\\");
             Directory.CreateDirectory("Cache\\genderWide\\");
             Directory.CreateDirectory("Cache\\genderSmall\\");
-            Directory.CreateDirectory("Cache\\squareLarge\\");
+            //Directory.CreateDirectory("Cache\\squareLarge\\");
             Directory.CreateDirectory("Cache\\squareSmall\\");
             Directory.CreateDirectory("Cache\\previewLarge\\");
             Directory.CreateDirectory("Cache\\previewSmall\\");

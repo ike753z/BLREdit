@@ -54,9 +54,10 @@ namespace BLREdit.UI
 
         public MainWindow()
         {
-            ImportSystem.Initialize();
-
             self = this;
+
+            ImportSystem.CreateImageCache();
+
             IsPlayerProfileChanging = true;
             IsPlayerNameChanging = true;
 

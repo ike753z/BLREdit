@@ -11,9 +11,15 @@ namespace BLREdit
         public string _class { get; set; }
 
         public string icon { get; set; }
+
+        
         public Uri? WideImage { get; set; }
+        public Uri? MaleWide { get; set; }
         public Uri? FemaleWide { get; set; }
+        
+
         public Uri? SmallSquareImage { get; set; }
+        public Uri? MaleSmall { get; set; }
         public Uri? FemaleSmall { get; set; }
         public Uri? Scope { get; set; }
         public Uri? MiniScope { get; set; }
@@ -30,6 +36,30 @@ namespace BLREdit
         public ImportStats stats { get; set; }
         public WikiStats WikiStats { get; set; }
         public IniStats IniStats { get; set; }
+
+        private Uri GetWideImage()
+        {
+            if (UI.MainWindow.self?.IsFemaleCheckBox?.IsChecked ?? false)
+            {
+                return new Uri(FemaleWide.LocalPath);
+            }
+            else
+            {
+                return new Uri(MaleWide.LocalPath);
+            }
+        }
+
+        private Uri GetSmallImage()
+        {
+            if (UI.MainWindow.self?.IsFemaleCheckBox?.IsChecked ?? false)
+            {
+                return new Uri(FemaleSmall.LocalPath);
+            }
+            else
+            {
+                return new Uri(MaleSmall.LocalPath);
+            }
+        }
 
         public string DisplayStatDesc1
         {

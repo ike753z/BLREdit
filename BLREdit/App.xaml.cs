@@ -25,6 +25,7 @@ namespace BLREdit
 
             LoggingSystem.Log("BLREdit Starting!");
             VersionCheck();
+            ImportSystem.Initialize();
         }
 
         public static async Task TestREST()
