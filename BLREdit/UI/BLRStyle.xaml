@@ -37,7 +37,7 @@
     <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
         <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
     </ControlTemplate>
-    
+
     <ControlTemplate x:Key="ComboBoxToggleButton"  TargetType="{x:Type ToggleButton}">
         <Grid Background="Transparent">
             <Image Name="Normal" Visibility="Hidden" Source="Resources/CleanedButton.png" Stretch="Fill" Width="{Binding (ComboBox.Width), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}}" Height="{Binding (ComboBox.Height), RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}}"/>

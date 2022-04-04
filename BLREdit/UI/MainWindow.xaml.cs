@@ -347,37 +347,83 @@ namespace BLREdit.UI
                 return "Basic";
             }
 
-            if (item1 == null && item2 != null)
-            {
-                return item2.descriptorName;
-            }
-            else if (item1 != null && item2 == null)
+            if (item1 != null && item2 == null && item3 == null)
             {
                 return item1.descriptorName;
+            }
+            else if (item1 == null && item2 != null && item3 == null)
+            {
+                return item2.descriptorName;
             }
             else if (item1 == null && item2 == null && item3 != null)
             {
                 return item3.descriptorName;
             }
-
-            if ( (item1.weaponModifiers.rating >= item2.weaponModifiers.rating) && (item1.weaponModifiers.rating >= item3.weaponModifiers.rating) )
+            else if (item1 != null && item2 != null && item3 == null) /// 1&2
             {
-                if (item1.weaponModifiers.rating > 0)
+                if (item1.weaponModifiers.rating >= item2.weaponModifiers.rating)
                 {
-                    return item1.descriptorName;
+                    if (item1.weaponModifiers.rating > 0)
+                    {
+                        return item1.descriptorName;
+                    }
+                    return "Basic";
                 }
-                return "Basic";
+                else
+                {
+                    return item2.descriptorName;
+                }
             }
-            else if ( (item2.weaponModifiers.rating >= item1.weaponModifiers.rating) && (item2.weaponModifiers.rating >= item3.weaponModifiers.rating) )
+            else if (item1 != null && item2 == null && item3 == null) /// 1&3
             {
-                return item2.descriptorName;
+                if (item1.weaponModifiers.rating >= item3.weaponModifiers.rating)
+                {
+                    if (item1.weaponModifiers.rating > 0)
+                    {
+                        return item1.descriptorName;
+                    }
+                    return "Basic";
+                }
+                else
+                {
+                    return item3.descriptorName;
+                }
             }
-            else if ( (item3.weaponModifiers.rating >= item1.weaponModifiers.rating) && (item3.weaponModifiers.rating >= item2.weaponModifiers.rating) )
+            else if (item1 == null && item2 != null && item3 == null) /// 2&3
             {
-                return item3.descriptorName;
+                if (item2.weaponModifiers.rating >= item3.weaponModifiers.rating)
+                {
+                    if (item2.weaponModifiers.rating > 0)
+                    {
+                        return item2.descriptorName;
+                    }
+                    return "Basic";
+                }
+                else
+                {
+                    return item3.descriptorName;
+                }
             }
-
-            return item1.descriptorName;
+            else if (item1 != null && item2 != null && item3 != null) /// 1 & 2 & 3
+            {
+                if (item1.weaponModifiers.rating >= item2.weaponModifiers.rating && item1.weaponModifiers.rating >= item3.weaponModifiers.rating)
+                {
+                    if (item1.weaponModifiers.rating > 0)
+                    {
+                        return item1.descriptorName;
+                    }
+                    return "Basic";
+                }
+                else if (item2.weaponModifiers.rating >= item1.weaponModifiers.rating && item2.weaponModifiers.rating >= item3.weaponModifiers.rating)
+                {
+                    return item2.descriptorName;
+                }
+                else 
+                {
+                    return item3.descriptorName;
+                }
+            }
+            return "Basic?";
         }
 
         public static double[] CalculateRange(ImportItem Reciever, double allRange)
@@ -509,50 +555,34 @@ namespace BLREdit.UI
             {
                 if (TightAimTime > 0)
                 {
-                    if (Scope.uid == 45005)
+                    if (Scope != null)
                     {
-                        return TightAimTime + ComboScopeMod + WikiScopeIn;
+                        switch (Scope.uid)
+                        {
+                            case 45005:
+                                return TightAimTime + ComboScopeMod + WikiScopeIn;
+                            case 45023:
+                                return TightAimTime + FourXAmmoCounterMod;
+                            case 45021:
+                                return TightAimTime + ArmComInfraredMod;
+                            case 45020:
+                                return TightAimTime + EMIInfraredMod;
+                            case 45019:
+                                return TightAimTime + EMIInfraredMK2Mod;
+                            case 45015:
+                                return TightAimTime + ArmComSniperMod;
+                            case 45008:
+                                return TightAimTime + SilverwoodHeavyMod;
+                            case 45007:
+                                return TightAimTime + KraneSniperScopeMod;
+                            case 45004:
+                                return TightAimTime + EMITechScopeMod;
+                            case 45001:
+                                return TightAimTime + FrontierSniperMod;
+                        }
                     }
-                    else if (Scope.uid == 45023)
-                    {
-                        return TightAimTime + FourXAmmoCounterMod;
-                    }
-                    else if (Scope.uid == 45021)
-                    {
-                        return TightAimTime + ArmComInfraredMod;
-                    }
-                    else if (Scope.uid == 45020)
-                    {
-                        return TightAimTime + EMIInfraredMod;
-                    }
-                    else if (Scope.uid == 45019)
-                    {
-                        return TightAimTime + EMIInfraredMK2Mod;
-                    }
-                    else if (Scope.uid == 45015)
-                    {
-                        return TightAimTime + ArmComSniperMod;
-                    }
-                    else if (Scope.uid == 45008)
-                    {
-                        return TightAimTime + SilverwoodHeavyMod;
-                    }
-                    else if (Scope.uid == 45007)
-                    {
-                        return TightAimTime + KraneSniperScopeMod;
-                    }
-                    else if (Scope.uid == 45004)
-                    {
-                        return TightAimTime + EMITechScopeMod;
-                    }
-                    else if (Scope.uid == 45001)
-                    {
-                        return TightAimTime + FrontierSniperMod;
-                    }
-                    else
-                    {
-                        return TightAimTime + WikiScopeIn;
-                    }
+                    
+                    return TightAimTime + WikiScopeIn; // this activates wheno uid is the same or the scope is null
                 }
             }
             return 0.225;
@@ -1138,12 +1168,16 @@ namespace BLREdit.UI
                 if (barrel.DataContext == null || (barrel.DataContext as ImportItem).name == MagiCowsWeapon.NoBarrel)
                 {
                     barrel.DataContext = weapon.GetBarrel();
+                    if (barrel.DataContext == null)
+                    {
+                        barrel.DataContext = ImportSystem.GetItemByName(MagiCowsWeapon.NoBarrel, ImportSystem.Mods.barrels);
+                    }
                     if (CheckForPistolAndBarrel(reciever))
                     {
-                        stock.DataContext = null;
+                        stock.DataContext = ImportSystem.GetItemByName(MagiCowsWeapon.NoStock, ImportSystem.Mods.stocks); ;
                     }
                 }
-                if (stock.DataContext == null || (barrel.DataContext as ImportItem).name == MagiCowsWeapon.NoStock)
+                if (stock.DataContext == null)
                 {
                     SetStock(reciever, barrel, stock, weapon.GetStock());
                 }

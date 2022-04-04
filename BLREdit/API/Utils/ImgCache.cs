@@ -1,83 +1,112 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace BLREdit
+namespace BLREdit.API.Utils
 {
-    public class FoxIcon
+    public static class ImgCache
     {
         private static bool AddFolderLine = AppDomain.CurrentDomain.BaseDirectory.EndsWith("\\");
 
         private const int WideImageWidth = 256;
         private const int WideImageHeight = 128;
-
         private const int LargeSquareImageWidth = 128;
-
         private const int SmallSquareImageWidth = 64;
 
-        public string Name { get; set; } = "";
-        public Uri Icon { get; set; } = null;
 
         public static readonly BitmapImage WideEmpty = CreateEmptyBitmap(WideImageWidth, WideImageHeight);
+        private static readonly BitmapImage Preview = CreateEmptyBitmap(1280, 720);
         private static readonly BitmapImage LargeSquareEmpty = CreateEmptyBitmap(LargeSquareImageWidth, LargeSquareImageWidth);
         private static readonly BitmapImage SmallSquareEmpty = CreateEmptyBitmap(SmallSquareImageWidth, SmallSquareImageWidth);
 
-        static FoxIcon()
+        static ImgCache()
         {
             WideEmpty.Freeze();
             LargeSquareEmpty.Freeze();
             SmallSquareEmpty.Freeze();
+            Preview.Freeze();
         }
 
-        public FoxIcon(string file)
+        private static string GetFemaleIconName(ImportItem item)
         {
-            string[] fileparts = file.Split('\\');
-            string[] iconparts = fileparts[fileparts.Length - 1].Split('.');
-            string iconname = "";
-            if (iconparts.Length > 2)
+            string[] parts = item.icon.Split('_');
+            string female = "";
+            for (int i = 0; i < parts.Length; i++)
             {
-                for (int i = 0; i < iconparts.Length - 1; i++)
+                if (i == parts.Length - 1)
                 {
-                    if (i != 0)
-                    {
-                        iconname += ".";
-                    }
-                    iconname += iconparts[i];
+                    female += "_Female";
+                }
+                if (i == 0)
+                {
+                    female += parts[i];
+                }
+                else
+                {
+                    female += "_" + parts[i];
                 }
             }
-            else
-            {
-                iconname = iconparts[0];
-            }
-            Name = iconname;
+            return female;
+        }
+
+        public static void CreateImageChacheForItem(ImportItem item)
+        {
+            Uri Icon;
+            Uri Female;
+            Uri Scope;
+
             if (!AddFolderLine)
             {
-                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + file, UriKind.Absolute);
+                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
+                Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
+                Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
             }
             else
             {
-                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + file, UriKind.Absolute);
+                Icon = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + item.icon + ".png", UriKind.Absolute);
+                Female = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\textures\\" + GetFemaleIconName(item) + ".png", UriKind.Absolute);
+                Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
+            }
+
+            if (!File.Exists(Icon.LocalPath)) { return; }
+
+            CreateCacheImage(Icon, item.WideImage, WideEmpty.Clone());
+            CreateCacheImage(Icon, item.SmallSquareImage, SmallSquareEmpty.Clone());
+            //CreateCacheImage(Icon, item.LargeSquareImage, LargeSquareEmpty.Clone());
+
+            if (item.Category == "upperBody" || item.Category == "lowerBody")
+            {
+                CreateCacheImage(Female, item.FemaleWide, WideEmpty.Clone());
+                CreateCacheImage(Female, item.FemaleSmall, SmallSquareEmpty.Clone());
+            }
+
+            if (item.Category == "scope")
+            {
+                CreateCacheImage(Scope, item.Scope, Preview.Clone());
+                CreateCacheImage(Scope, item.MiniScope, SmallSquareEmpty.Clone());
             }
         }
 
-        public BitmapSource GetWideImage()
+        private static void CreateCacheImage(Uri source, Uri target, BitmapImage background)
         {
-            return GetImage(WideEmpty.Clone());
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(CombineImage(source, background)));
+
+            using (var fileStream = new FileStream(target.LocalPath, FileMode.Create))
+            {
+                    encoder.Save(fileStream);
+                    fileStream.Close();
+            }
         }
 
-        public BitmapSource GetLargeSquareImage()
-        {
-            return GetImage(LargeSquareEmpty.Clone());
-        }
 
-        public BitmapSource GetSmallSquareImage()
-        {
-            return GetImage(SmallSquareEmpty.Clone());
-        }
-
-        private BitmapSource GetImage(BitmapImage empty, bool Uniform = true)
+        private static BitmapSource CombineImage(Uri source, BitmapImage empty, bool Uniform = true)
         {
             DrawingGroup group = new DrawingGroup();
 
@@ -89,7 +118,7 @@ namespace BLREdit
             };
             group.Children.Add(baseImage);
 
-            var tmp = GetImage(); //Load the actual image we want to draw
+            var tmp = new BitmapImage(source); //Load the actual image we want to draw
 
             ImageDrawing actualImage = new ImageDrawing
             {
@@ -133,10 +162,9 @@ namespace BLREdit
             }
         }
 
-        private BitmapSource GetImage()
-        {
-            return new BitmapImage(Icon);
-        }
+
+
+
 
         public static BitmapSource ToBitmapSource(DrawingImage source)
         {
@@ -185,11 +213,6 @@ namespace BLREdit
             stream.Close();
 
             return bitmapImage;
-        }
-
-        public override string ToString()
-        {
-            return LoggingSystem.ObjectToTextWall(this);
         }
     }
 }

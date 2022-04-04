@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BLREdit.API.Utils;
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -9,10 +11,12 @@ namespace BLREdit
 
     public static class ImportSystem
     {
+        private static bool AddFolderLine = AppDomain.CurrentDomain.BaseDirectory.EndsWith("\\");
+
         public static readonly Dictionary<float, float> DamagePercentToValue = new Dictionary<float, float>();
 
-        public static readonly FoxIcon[] Icons = LoadAllIcons();
-        public static readonly FoxIcon[] Crosshairs = LoadAllCrosshairs();
+        //public static readonly FoxIcon[] Icons = LoadAllIcons();
+        //public static readonly FoxIcon[] Crosshairs = LoadAllCrosshairs();
         //private static readonly ImportGear importGear 
         //private static readonly ImportMods importMods 
         //private static readonly ImportWeapons importWeapons 
@@ -30,7 +34,8 @@ namespace BLREdit
             var watch = LoggingSystem.LogInfo("Initializing Import System");
 
             CleanItems();
-            UpdateImages();
+            CreateImageCache();
+            //UpdateImages();
             LoadWikiStats();
             LoadIniStats();
 
@@ -61,6 +66,60 @@ namespace BLREdit
             Gear = new ImportGear(Gear);
             Mods = new ImportMods(Mods);
             Weapons = new ImportWeapons(Weapons);
+        }
+
+        public static ImportItem[] CleanItems(ImportItem[] importItems, string categoryName)
+        {
+            var watch = LoggingSystem.LogInfo("Started Cleaning " + categoryName, "");
+            List<ImportItem> cleanedItems = new List<ImportItem>();
+            foreach (ImportItem item in importItems)
+            {
+                if (IsValidItem(item) && !string.IsNullOrEmpty(item.icon))
+                {
+                    item.Category = categoryName;
+
+                    if (!AddFolderLine)
+                    {
+                        item.WideImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.FemaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "genderWide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.SmallSquareImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
+                        item.FemaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "genderSmall\\" + item.icon + ".png", UriKind.Absolute);
+                        if (categoryName == "scope")
+                        {
+                            item.Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "previewLarge\\" + item.name + ".png", UriKind.Absolute);
+                            item.MiniScope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\" + IOResources.IMG_CACHE + "previewSmall\\" + item.name + ".png", UriKind.Absolute);
+                        }
+                        else
+                        {
+                            item.Scope = null;
+                            item.MiniScope = null;
+                        }
+                    }
+                    else
+                    {
+                        item.WideImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "wide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.FemaleWide = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "genderWide\\" + item.icon + ".png", UriKind.Absolute);
+                        item.SmallSquareImage = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "squareSmall\\" + item.icon + ".png", UriKind.Absolute);
+                        item.FemaleSmall = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "genderSmall\\" + item.icon + ".png", UriKind.Absolute);
+                        if (categoryName == "scope")
+                        {
+                            item.Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "previewLarge\\" + item.name + ".png", UriKind.Absolute);
+                            item.MiniScope = new Uri(AppDomain.CurrentDomain.BaseDirectory + IOResources.IMG_CACHE + "previewSmall\\" + item.name + ".png", UriKind.Absolute);
+                        }
+                        else
+                        {
+                            item.Scope = null;
+                            item.MiniScope = null;
+                        }
+                    }
+
+                    
+
+                    cleanedItems.Add(item);
+                }
+            }
+            LoggingSystem.LogInfoAppend(watch, " items:" + cleanedItems.Count + " are Left");
+            return cleanedItems.ToArray();
         }
 
         private static void LoadWikiStats()
@@ -288,23 +347,63 @@ namespace BLREdit
 
         internal static void UpdateImagesForImportItems(ImportItem[] items)
         {
-            if (items.Length > 0)
-            {
-                var watch = LoggingSystem.LogInfo("Updating Images for " + items[0].Category, "");
+            
+            return;
+            
+            //if (items.Length > 0)
+            //{
+            //    var watch = LoggingSystem.LogInfo("Updating Images for " + items[0].Category, "");
 
-                Parallel.ForEach(items, item =>
-                {
-                    item.LoadImage();
-                    item.wideImageMale.Freeze();
-                    item.wideImageFemale?.Freeze();
-                    item.largeSquareImageMale.Freeze();
-                    item.largeSquareImageFemale?.Freeze();
-                    item.smallSquareImageMale.Freeze();
-                    item.smallSquareImageFemale?.Freeze();
-                });
-                LoggingSystem.LogInfoAppend(watch);
+            //    Parallel.ForEach(items, item =>
+            //    {
+            //        item.LoadImage();
+            //        item.wideImageMale.Freeze();
+            //        item.wideImageFemale?.Freeze();
+            //        item.largeSquareImageMale.Freeze();
+            //        item.largeSquareImageFemale?.Freeze();
+            //        item.smallSquareImageMale.Freeze();
+            //        item.smallSquareImageFemale?.Freeze();
+            //    });
+            //    LoggingSystem.LogInfoAppend(watch);
+            //}
+        }
+
+        internal static void CreateImageCache()
+        {
+            if (Directory.Exists("Cache\\")) return;
+
+            Directory.CreateDirectory("Cache\\wide\\");
+            Directory.CreateDirectory("Cache\\genderWide\\");
+            Directory.CreateDirectory("Cache\\genderSmall\\");
+            Directory.CreateDirectory("Cache\\squareLarge\\");
+            Directory.CreateDirectory("Cache\\squareSmall\\");
+            Directory.CreateDirectory("Cache\\previewLarge\\");
+            Directory.CreateDirectory("Cache\\previewSmall\\");
+
+            List<ImportItem> allUsedItems = new List<ImportItem>();
+            allUsedItems.AddRange(Weapons.primary);
+            allUsedItems.AddRange(Weapons.secondary);
+            allUsedItems.AddRange(Mods.muzzles);
+            allUsedItems.AddRange(Mods.barrels);
+            allUsedItems.AddRange(Mods.grips);
+            allUsedItems.AddRange(Mods.magazines);
+            allUsedItems.AddRange(Mods.scopes);
+            allUsedItems.AddRange(Mods.stocks);
+            allUsedItems.AddRange(Mods.camosBody);
+            allUsedItems.AddRange(Gear.helmets);
+            allUsedItems.AddRange(Gear.upperBodies);
+            allUsedItems.AddRange(Gear.lowerBodies);
+            allUsedItems.AddRange(Gear.hangers);
+            allUsedItems.AddRange(Gear.attachments);
+            allUsedItems.AddRange(Gear.tactical);
+
+            foreach(ImportItem o in allUsedItems)
+            {
+                //LoggingSystem.LogInfo("[Cache]:" + o.icon + ".png");
+                ImgCache.CreateImageChacheForItem(o);
             }
         }
+
         private static FoxIcon[] LoadAllIcons()
         {
             var watch = LoggingSystem.LogInfo("Loading All Icons", "");
@@ -336,21 +435,7 @@ namespace BLREdit
             return icons.ToArray();
         }
 
-        public static ImportItem[] CleanItems(ImportItem[] importItems, string categoryName)
-        {
-            var watch = LoggingSystem.LogInfo("Started Cleaning " + categoryName, "");
-            List<ImportItem> cleanedItems = new List<ImportItem>();
-            foreach (ImportItem item in importItems)
-            {
-                if (IsValidItem(item))
-                {
-                    item.Category = categoryName;
-                    cleanedItems.Add(item);
-                }
-            }
-            LoggingSystem.LogInfoAppend(watch, " items:" + cleanedItems.Count + " are Left");
-            return cleanedItems.ToArray();
-        }
+
         public static bool IsValidItem(ImportItem item)
         {
             return item.tooltip != "SHOULDN'T BE USED" && !string.IsNullOrEmpty(item.name);

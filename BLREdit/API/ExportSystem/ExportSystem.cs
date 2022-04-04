@@ -72,7 +72,7 @@ namespace BLREdit
                 bool requestDelete = false;
 
                 try { profile = IOResources.DeserializeFile<ExportSystemProfile>(file); }
-                catch { LoggingSystem.LogInfo("Found an old profile converting it to new profile format"); profile = IOResources.DeserializeFile<MagiCowsOldProfile>(file).ConvertToNew(); }
+                catch(Exception error) { LoggingSystem.LogInfo("Found an old profile converting it to new profile format\n" + error.Message); profile = IOResources.DeserializeFile<MagiCowsOldProfile>(file).ConvertToNew(); }
                 profiles.Add(profile);
 
                 if (!profile.IsHealthOkAndRepair())
@@ -90,6 +90,7 @@ namespace BLREdit
 
                 if (requestDelete)
                 {
+                    LoggingSystem.LogInfo("Deletion Request:" + file);
                     try { File.Delete(file); }
                     catch { LoggingSystem.LogError("Could not delete file:" + file); }
                 }
