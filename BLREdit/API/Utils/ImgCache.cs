@@ -74,8 +74,6 @@ namespace BLREdit.API.Utils
                 Scope = new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\crosshairs\\" + item.name + ".png", UriKind.Absolute);
             }
 
-            if (!File.Exists(Icon.LocalPath)) { return; }
-
             CreateCacheImage(Icon, item.WideImage, WideEmpty.Clone());
             CreateCacheImage(Icon, item.SmallSquareImage, SmallSquareEmpty.Clone());
             //CreateCacheImage(Icon, item.LargeSquareImage, LargeSquareEmpty.Clone());
@@ -96,7 +94,14 @@ namespace BLREdit.API.Utils
         private static void CreateCacheImage(Uri source, Uri target, BitmapImage background)
         {
             PngBitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(CombineImage(source, background)));
+            if (!File.Exists(source.LocalPath))
+            {
+                encoder.Frames.Add(BitmapFrame.Create(background));
+            }
+            else
+            {
+                encoder.Frames.Add(BitmapFrame.Create(CombineImage(source, background)));
+            }
 
             using (var fileStream = new FileStream(target.LocalPath, FileMode.Create))
             {

@@ -34,7 +34,9 @@ namespace BLREdit
             var watch = LoggingSystem.LogInfo("Initializing Import System");
 
             CleanItems();
+            var timer = LoggingSystem.LogInfo("Image Cache Creation: ", "");
             CreateImageCache();
+            LoggingSystem.LogInfoAppend(timer);
             //UpdateImages();
             LoadWikiStats();
             LoadIniStats();
@@ -74,7 +76,7 @@ namespace BLREdit
             List<ImportItem> cleanedItems = new List<ImportItem>();
             foreach (ImportItem item in importItems)
             {
-                if (IsValidItem(item) && !string.IsNullOrEmpty(item.icon))
+                if (IsValidItem(item))
                 {
                     item.Category = categoryName;
 
