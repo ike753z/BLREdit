@@ -22,7 +22,7 @@ namespace BLREdit
         {
             if (App.Settings.EnableDebugging && watch != null)
             {
-                Trace.WriteLine(finish + " Done! in " + watch.ElapsedMilliseconds + "ms");
+                Trace.WriteLine(finish + " Done! in " + (watch.ElapsedTicks / (double)Stopwatch.Frequency).ToString("0.00000") + "s");
             }
         }
 

@@ -2,20 +2,20 @@
 
 namespace BLREdit
 {
-    public class ImportMods
+    public class ImportMods : BLREdit.API.ImportSystem.IImportCategory
     {
-        public ImportItem[] ammo { get; set; }
-        public ImportItem[] ammos { get; set; }
-        public ImportItem[] barrels { get; set; }
-        public ImportItem[] camosBody { get; set; }
-        //public ImportItem[] camosWeapon { get; set; }
-        public ImportItem[] grips { get; set; }
-        public ImportItem[] magazines { get; set; }
-        public ImportItem[] muzzles { get; set; }
-        public ImportItem[] primarySkins { get; set; }
-        public ImportItem[] scopes { get; set; }
+        public List<ImportItem> ammo { get; set; }
+        public List<ImportItem> ammos { get; set; }
+        public List<ImportItem> barrels { get; set; }
+        public List<ImportItem> camosBody { get; set; }
+        //public List<ImportItem> camosWeapon { get; set; }
+        public List<ImportItem> grips { get; set; }
+        public List<ImportItem> magazines { get; set; }
+        public List<ImportItem> muzzles { get; set; }
+        public List<ImportItem> primarySkins { get; set; }
+        public List<ImportItem> scopes { get; set; }
         public object[] secondarySkins { get; set; }
-        public ImportItem[] stocks { get; set; }
+        public List<ImportItem> stocks { get; set; }
 
         internal void AssignWikiStats(WikiStats[] stats)
         {
@@ -37,20 +37,19 @@ namespace BLREdit
             return stats.ToArray();
         }
 
-        public ImportMods() { }
-        public ImportMods(ImportMods mods)
+        public void CleanItems()
         {
-            ammo = ImportSystem.CleanItems(mods.ammo, "ammo");
-            ammos = ImportSystem.CleanItems(mods.ammos, "ammos");
-            barrels = ImportSystem.CleanItems(mods.barrels, "barrel");
-            camosBody = ImportSystem.CleanItems(mods.camosBody, "camoBody");
+            ImportSystem.CleanItems(ammo, "ammo");
+            ImportSystem.CleanItems(ammos, "ammos");
+            ImportSystem.CleanItems(barrels, "barrel");
+            ImportSystem.CleanItems(camosBody, "camoBody");
             //camosWeapon = ImportSystem.CleanItems(mods.camosWeapon, "camoWeapon");
-            grips = ImportSystem.CleanItems(mods.grips, "grip");
-            magazines = ImportSystem.CleanItems(mods.magazines, "magazine");
-            muzzles = ImportSystem.CleanItems(mods.muzzles, "muzzle");
-            primarySkins = ImportSystem.CleanItems(mods.primarySkins, "primarySkin");
-            scopes = ImportSystem.CleanItems(mods.scopes, "scope");
-            stocks = ImportSystem.CleanItems(mods.stocks, "stock");
+            ImportSystem.CleanItems(grips, "grip");
+            ImportSystem.CleanItems(magazines, "magazine");
+            ImportSystem.CleanItems(muzzles, "muzzle");
+            ImportSystem.CleanItems(primarySkins, "primarySkin");
+            ImportSystem.CleanItems(scopes, "scope");
+            ImportSystem.CleanItems(stocks, "stock");
         }
         public override string ToString()
         {

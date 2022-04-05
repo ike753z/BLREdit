@@ -2,18 +2,18 @@
 
 namespace BLREdit
 {
-    public class ImportGear
+    public class ImportGear : BLREdit.API.ImportSystem.IImportCategory
     {
-        public ImportItem[] attachments { get; set; }
-        public ImportItem[] avatars { get; set; }
-        public ImportItem[] badges { get; set; }
+        public List<ImportItem> attachments { get; set; }
+        public List<ImportItem> avatars { get; set; }
+        public List<ImportItem> badges { get; set; }
         public object[] crosshairs { get; set; }
-        public ImportItem[] emotes { get; set; }
-        public ImportItem[] hangers { get; set; }
-        public ImportItem[] helmets { get; set; }
-        public ImportItem[] lowerBodies { get; set; }
-        public ImportItem[] tactical { get; set; }
-        public ImportItem[] upperBodies { get; set; }
+        public List<ImportItem> emotes { get; set; }
+        public List<ImportItem> hangers { get; set; }
+        public List<ImportItem> helmets { get; set; }
+        public List<ImportItem> lowerBodies { get; set; }
+        public List<ImportItem> tactical { get; set; }
+        public List<ImportItem> upperBodies { get; set; }
 
         internal void AssignWikiStats(WikiStats[] stats)
         {
@@ -43,18 +43,17 @@ namespace BLREdit
             return stats.ToArray();
         }
 
-        public ImportGear() { }
-        public ImportGear(ImportGear gear)
+        public void CleanItems()
         {
-            attachments = ImportSystem.CleanItems(gear.attachments, "attachments");
-            avatars = ImportSystem.CleanItems(gear.avatars, "avatar");
-            badges = ImportSystem.CleanItems(gear.badges, "badge");
-            emotes = ImportSystem.CleanItems(gear.emotes, "emote");
-            hangers = ImportSystem.CleanItems(gear.hangers, "hanger");
-            helmets = ImportSystem.CleanItems(gear.helmets, "helmet");
-            lowerBodies = ImportSystem.CleanItems(gear.lowerBodies, "lowerBody");
-            tactical = ImportSystem.CleanItems(gear.tactical, "tactical");
-            upperBodies = ImportSystem.CleanItems(gear.upperBodies, "upperBody");
+            ImportSystem.CleanItems(attachments, "attachments");
+            ImportSystem.CleanItems(avatars, "avatar");
+            ImportSystem.CleanItems(badges, "badge");
+            ImportSystem.CleanItems(emotes, "emote");
+            ImportSystem.CleanItems(hangers, "hanger");
+            ImportSystem.CleanItems(helmets, "helmet");
+            ImportSystem.CleanItems(lowerBodies, "lowerBody");
+            ImportSystem.CleanItems(tactical, "tactical");
+            ImportSystem.CleanItems(upperBodies, "upperBody");
         }
 
         public override string ToString()

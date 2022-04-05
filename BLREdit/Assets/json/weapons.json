@@ -24,7 +24,7 @@
     },
     {
       "class": "FoxWeapon_Crowbar",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Crowbar",
       "stats": {
         "accuracy": 0.0,
@@ -46,7 +46,7 @@
     },
     {
       "class": "FoxWeapon_GoldCrowbar",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Crowbar",
       "stats": {
         "accuracy": 0.0,
@@ -68,7 +68,7 @@
     },
     {
       "class": "FoxWeapon_SilverCrowbar",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Crowbar",
       "stats": {
         "accuracy": 0.0,
@@ -112,7 +112,7 @@
     },
     {
       "class": "FoxWeapon_Beacon",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Respawn Beacon",
       "stats": {
         "accuracy": 0.0,
@@ -223,7 +223,7 @@
     },
     {
       "class": "FoxWeapon_Hammer",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "stats": {
         "accuracy": 0.0,
@@ -267,7 +267,7 @@
     },
     {
       "class": "FoxWeapon_CivBarricade",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Improvised Shield",
       "stats": {
         "accuracy": 0.0,
@@ -290,7 +290,7 @@
     },
     {
       "class": "FoxWeapon_CivClaw",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Overgrown Infected Finger Nails",
       "stats": {
         "accuracy": 0.0,
@@ -312,7 +312,7 @@
     },
     {
       "class": "FoxWeapon_DogClaw",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Dog Claw",
       "stats": {
         "accuracy": 0.0,
@@ -334,7 +334,7 @@
     },
     {
       "class": "FoxWeapon_FlamingClaw",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Burning Man",
       "stats": {
         "accuracy": 0.0,
@@ -356,7 +356,7 @@
     },
     {
       "class": "FoxWeapon_HulkClaw",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Overgrown Infected Finger Nails",
       "stats": {
         "accuracy": 0.0,
@@ -400,7 +400,7 @@
     },
     {
       "class": "FoxWeapon_Barricade",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Barricade Mk.1",
       "stats": {
         "accuracy": 0.0,
@@ -423,7 +423,7 @@
     },
     {
       "class": "FoxWeapon_Barricade2",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Riot Shield",
       "stats": {
         "accuracy": 0.0,
@@ -489,7 +489,7 @@
     },
     {
       "class": "FoxWeapon_CombatKnife",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Combat Knife Mk.1",
       "stats": {
         "accuracy": 0.0,
@@ -577,7 +577,7 @@
     },
     {
       "class": "FoxWeapon_GoldCombatKnife",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Combat Knife Mk.1",
       "stats": {
         "accuracy": 0.0,
@@ -711,7 +711,7 @@
     },
     {
       "class": "FoxWeapon_Machete",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Machete",
       "stats": {
         "accuracy": 0.0,
@@ -779,7 +779,7 @@
     },
     {
       "class": "FoxWeapon_SonicKnife",
-      "icon": "",
+      "icon": "no_icon",
       "name": "Combat Knife Mk.2",
       "stats": {
         "accuracy": 0.0,
@@ -1417,7 +1417,7 @@
     },
     {
       "class": "FoxWeapon_DeployableJammer",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "stats": {
         "accuracy": 0.0,

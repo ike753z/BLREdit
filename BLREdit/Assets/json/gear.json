@@ -2,7 +2,7 @@
   "attachments": [
     {
       "class": "FoxDataProvider_Gear_Attachment",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Gear",
       "tooltip": "Nothing to equip.",
       "uid": 12015
@@ -633,7 +633,7 @@
   "badges": [
     {
       "class": "FoxDataProvider_Gear_Badge",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Trophy",
       "tooltip": "You don't need a trophy to show off your awesomeness.",
       "uid": 46000
@@ -1014,882 +1014,882 @@
   "emotes": [
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 350
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 351
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 352
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 353
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 354
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 355
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 356
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 357
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 358
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 359
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 360
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 361
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 364
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 365
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 366
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 367
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 368
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 375
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 376
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 377
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 378
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 379
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 380
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 381
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 382
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 383
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 384
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 385
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 388
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 390
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 391
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 392
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 393
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 394
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 395
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 396
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 397
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 398
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 399
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 400
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 401
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 402
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 403
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 404
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 405
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 406
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 407
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 408
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 409
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 410
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 411
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 412
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 413
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 414
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 420
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 415
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 416
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 417
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 418
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 419
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 422
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 300
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 301
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 302
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 303
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 304
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 305
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 306
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 307
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 308
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 309
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 310
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 311
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 312
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 313
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 314
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 315
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 316
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 317
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 318
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 319
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 320
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 322
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 323
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 324
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 325
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 326
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 327
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 328
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 329
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 330
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 331
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 332
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 333
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 334
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 335
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 336
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 337
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 338
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 339
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 340
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 341
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 342
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 343
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 344
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 345
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 346
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 347
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 348
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 349
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 423
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 424
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 425
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 426
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 427
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 428
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 429
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 430
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 389
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 421
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 371
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 372
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 386
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 387
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 321
     },
     {
       "class": "FoxDataProvider_Emote",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "",
       "uid": 498
@@ -1898,7 +1898,7 @@
   "hangers": [
     {
       "class": "FoxDataProvider_Hangers",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Weapon Tag",
       "pawnModifiers": {
         "BodyDamageReduction": 0,
@@ -5811,7 +5811,7 @@
     },
     {
       "class": "FoxDataProvider_Hangers",
-      "icon": "Tag",
+      "icon": "no_icon",
       "name": "Portal Gun (Orange)",
       "pawnModifiers": {
         "BodyDamageReduction": 0,
@@ -9715,7 +9715,7 @@
   "tactical": [
     {
       "class": "FoxDataProvider_Gear_Tactical",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Tactical Gear",
       "tooltip": "Nothing to equip.",
       "uid": 13000
@@ -9813,7 +9813,7 @@
     },
     {
       "class": "FoxDataProvider_Gear_Tactical",
-      "icon": "",
+      "icon": "no_icon",
       "name": "",
       "tooltip": "SHOULDN'T BE USED",
       "uid": 13099

@@ -26,16 +26,16 @@ namespace BLREdit
 
         private static IniStats[] IniItemStats;
 
-        public static ImportGear Gear { get; private set; } = IOResources.DeserializeFile<ImportGear>(IOResources.GEAR_FILE);
-        public static ImportMods Mods { get; private set; } = IOResources.DeserializeFile<ImportMods>(IOResources.MOD_FILE);
-        public static ImportWeapons Weapons { get; private set; } = IOResources.DeserializeFile<ImportWeapons>(IOResources.WEAPON_FILE);
+        public static ImportGear Gear { get; private set; }
+        public static ImportMods Mods { get; private set; }
+        public static ImportWeapons Weapons { get; private set; }
 
         public static void Initialize()
         {
-            var watch = LoggingSystem.Log("Initializing Import System");
+            var watch = LoggingSystem.Log("Initializing Import System", LogTypes.Timing);
 
+            LoadItems();
             CleanItems();
-            //UpdateImages();
             LoadWikiStats();
             LoadIniStats();
 
@@ -47,6 +47,15 @@ namespace BLREdit
             LoggingSystem.Append(watch, "Import System");
         }
 
+        private static void LoadItems()
+        {
+            var watch = LoggingSystem.Log("Loading Item Lists", LogTypes.Timing, "");
+            Gear = IOResources.DeserializeFile<ImportGear>(IOResources.GEAR_FILE);
+            Mods = IOResources.DeserializeFile<ImportMods>(IOResources.MOD_FILE);
+            Weapons = IOResources.DeserializeFile<ImportWeapons>(IOResources.WEAPON_FILE);
+            LoggingSystem.Append(watch, "");
+        }
+
 #pragma warning disable IDE0051 // Remove unused private members
         private static void UpgradeIniStats()
 #pragma warning restore IDE0051 // Remove unused private members
@@ -56,15 +65,16 @@ namespace BLREdit
 
         private static void CleanItems()
         {
-            Gear = new ImportGear(Gear);
-            Mods = new ImportMods(Mods);
-            Weapons = new ImportWeapons(Weapons);
+            var watch = LoggingSystem.Log("Cleaning Items", LogTypes.Timing, "");
+            Gear.CleanItems();
+            Mods.CleanItems();
+            Weapons.CleanItems();
+            LoggingSystem.Append(watch);
         }
 
-        public static ImportItem[] CleanItems(ImportItem[] importItems, string categoryName)
+        public static void CleanItems(List<ImportItem> importItems, string categoryName)
         {
-            var watch = LoggingSystem.Log("Started Cleaning " + categoryName, LogTypes.Timing, "");
-            List<ImportItem> cleanedItems = new();
+            List<ImportItem> toRemove = new();
             foreach (ImportItem item in importItems)
             {
                 if (IsValidItem(item))
@@ -107,12 +117,16 @@ namespace BLREdit
                             item.MiniScope = null;
                         }
                     }
-
-                    cleanedItems.Add(item);
+                }
+                else
+                { 
+                    toRemove.Add(item);
                 }
             }
-            LoggingSystem.Append(watch, " items:" + cleanedItems.Count + " are Left");
-            return cleanedItems.ToArray();
+            foreach (ImportItem item in toRemove)
+            { 
+                importItems.Remove(item);
+            }
         }
 
         private static void LoadWikiStats()
@@ -130,7 +144,7 @@ namespace BLREdit
             AssignIniStatsTo(Weapons.secondary, IniItemStats);
         }
 
-        public static IniStats[] GetFromWeapons(ImportItem[] items1, ImportItem[] items2)
+        public static IniStats[] GetFromWeapons(List<ImportItem> items1, List<ImportItem> items2)
         {
             List<IniStats> stats = new();
             foreach (ImportItem item in items1)
@@ -150,7 +164,7 @@ namespace BLREdit
             return stats.ToArray();
         }
 
-        public static ImportItem GetItemByID(int index, ImportItem[] items)
+        public static ImportItem GetItemByID(int index, List<ImportItem> items)
         {
             if (index < 0)
             { return null; }
@@ -158,7 +172,7 @@ namespace BLREdit
         }
 
 
-        public static ImportItem GetItemByName(string name, ImportItem[] items)
+        public static ImportItem GetItemByName(string name, List<ImportItem> items)
         {
             foreach (ImportItem item in items)
             {
@@ -170,7 +184,7 @@ namespace BLREdit
             return null;
         }
 
-        internal static void AssignIniStatsTo(ImportItem[] items, IniStats[] stats)
+        internal static void AssignIniStatsTo(List<ImportItem> items, IniStats[] stats)
         {
             foreach (ImportItem item in items)
             {
@@ -227,10 +241,10 @@ namespace BLREdit
         {
             return GetItemID(item, Mods.camosBody);
         }
-        public static int GetItemID(ImportItem item, ImportItem[] items)
+        public static int GetItemID(ImportItem item, List<ImportItem> items)
         {
             if (item == null) { return -1; }
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 if (items[i].uid == item.uid)
                 {
@@ -240,7 +254,7 @@ namespace BLREdit
             return -1;
         }
 
-        internal static void AssignWikiStatsTo(ImportItem[] items, WikiStats[] stats)
+        internal static void AssignWikiStatsTo(List<ImportItem> items, WikiStats[] stats)
         {
             foreach (ImportItem item in items)
             {
@@ -291,7 +305,7 @@ namespace BLREdit
             stats.AddRange(Weapons.GetWikiStats());
         }
 
-        internal static WikiStats[] GetWikiStats(ImportItem[] items)
+        internal static WikiStats[] GetWikiStats(List<ImportItem> items)
         {
             List<WikiStats> stats = new();
             foreach (var item in items)
@@ -336,9 +350,17 @@ namespace BLREdit
 
         internal static void CreateImageCache()
         {
-            if (Directory.Exists("Cache\\")) return;
-
+            string cachedJsonFile = "Cache\\cached.json";
             var timer = LoggingSystem.Log("Image Cache Creation: ", LogTypes.Timing, "");
+
+            List<string> AlreadyCached = new();
+
+            if (Directory.Exists("Cache\\") && File.Exists(cachedJsonFile)) 
+            {
+                // TODO: Get Cached ItemImage List
+                AlreadyCached = IOResources.DeserializeFile<List<string>>(cachedJsonFile);
+                //File.Delete(cachedJsonFile); Dont have to delete it IO Resources will do that for us when serializing it again
+            }
 
             Directory.CreateDirectory("Cache\\wide\\");
             Directory.CreateDirectory("Cache\\genderWide\\");
@@ -366,9 +388,23 @@ namespace BLREdit
             allUsedItems.AddRange(Gear.tactical);
 
             var deduplicated = allUsedItems.GroupBy(x => x.icon).Select(x => x.First()).ToList();
+            foreach (var item in AlreadyCached)
+            {
+                for(int i = 0; i < deduplicated.Count; i++)
+                {
+                    if (deduplicated[i].name.Equals(item))
+                    { 
+                        deduplicated.RemoveAt(i);
+                        continue;
+                    }
+                }
+            }
 
-            BLREdit.UI.ProgressBar bar = new UI.ProgressBar(deduplicated);
+            BLREdit.UI.ProgressBar bar = new UI.ProgressBar(ref deduplicated, ref AlreadyCached);
             bar.ShowDialog();
+
+            IOResources.SerializeFile(cachedJsonFile, AlreadyCached, true, false);
+
             LoggingSystem.Append(timer);
         }
 

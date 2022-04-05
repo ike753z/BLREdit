@@ -2,11 +2,11 @@
 
 namespace BLREdit
 {
-    public class ImportWeapons
+    public class ImportWeapons : BLREdit.API.ImportSystem.IImportCategory
     {
-        public ImportItem[] depot { get; set; }
-        public ImportItem[] primary { get; set; }
-        public ImportItem[] secondary { get; set; }
+        public List<ImportItem> depot { get; set; }
+        public List<ImportItem> primary { get; set; }
+        public List<ImportItem> secondary { get; set; }
 
         internal void AssignWikiStats(WikiStats[] stats)
         {
@@ -24,12 +24,11 @@ namespace BLREdit
             return stats.ToArray();
         }
 
-        public ImportWeapons() { }
-        public ImportWeapons(ImportWeapons weapons)
+        public void CleanItems()
         {
-            depot = ImportSystem.CleanItems(weapons.depot, "depot");
-            primary = ImportSystem.CleanItems(weapons.primary, "primary");
-            secondary = ImportSystem.CleanItems(weapons.secondary, "secondary");
+            ImportSystem.CleanItems(depot, "depot");
+            ImportSystem.CleanItems(primary, "primary");
+            ImportSystem.CleanItems(secondary, "secondary");
         }
 
         public override string ToString()

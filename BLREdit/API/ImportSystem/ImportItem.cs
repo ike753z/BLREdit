@@ -820,7 +820,7 @@ namespace BLREdit
                     };
 
                     double ROF = 0, Reload = 0, Swap = 0, Zoom = 0, ScopeIn = 0, Run = 0;
-                    UI.MainWindow.AccumulateStatsOfWeaponParts(items.ToArray(), ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
+                    UI.MainWindow.AccumulateStatsOfWeaponParts(items, ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
 
                     double allMovementScopeIn = defaultBarrel?.weaponModifiers?.movementSpeed ?? 0;
                     allMovementScopeIn += defaultStock?.weaponModifiers?.movementSpeed ?? 0;
@@ -892,7 +892,7 @@ namespace BLREdit
                     };
 
                     double ROF = 0, Reload = 0, Swap = 0, Zoom = 0, ScopeIn = 0, Run = 0;
-                    UI.MainWindow.AccumulateStatsOfWeaponParts(items.ToArray(), ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
+                    UI.MainWindow.AccumulateStatsOfWeaponParts(items, ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
 
                     double allMovementScopeIn = defaultBarrel?.weaponModifiers?.movementSpeed ?? 0;
                     allMovementScopeIn += defaultStock?.weaponModifiers?.movementSpeed ?? 0;

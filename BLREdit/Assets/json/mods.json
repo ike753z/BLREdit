@@ -1482,7 +1482,7 @@
     },
     {
       "class": "FoxWeaponBarrel_Grip_None",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Grip",
       "descriptorName": "Unbound",
       "pawnModifiers": {
@@ -2934,7 +2934,7 @@
     },
     {
       "class": "FoxWeaponBarrel_None",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Barrel Mod",
       "descriptorName": "Wicked",
       "pawnModifiers": {
@@ -15504,7 +15504,7 @@
   "muzzles": [
     {
       "class": "FoxDataProvider_Muzzle",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Muzzle Mod",
       "descriptorName": "Choked",
       "pawnModifiers": {
@@ -25299,7 +25299,7 @@
     },
     {
       "class": "FoxWeaponScope_Default",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Optic Mod",
       "descriptorName": "Basic",
       "tooltip": "No optic mod",
@@ -26626,7 +26626,7 @@
     },
     {
       "class": "FoxWeaponStock_None",
-      "icon": "",
+      "icon": "no_icon",
       "name": "No Stock",
       "descriptorName": "Prototype",
       "pawnModifiers": {

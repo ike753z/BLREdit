@@ -26,11 +26,13 @@ namespace BLREdit.UI
     {
 
 		List<ImportItem> items;
-        public ProgressBar(List<ImportItem> items)
+		List<string> alreadyCached;
+        public ProgressBar(ref List<ImportItem> items, ref List<string> cached)
         {
             InitializeComponent();
 			this.items = items;
-			this.pbStatus.Maximum = items.Count-1;
+			this.alreadyCached = cached;
+			this.pbStatus.Maximum = items.Count;
 		}
 
 		private void Window_ContentRendered(object sender, EventArgs e)
@@ -57,10 +59,14 @@ namespace BLREdit.UI
 				Interlocked.Increment(ref progress);
 				(sender as BackgroundWorker).ReportProgress(progress);
 			});
+			foreach (var item in items)
+			{
+				alreadyCached.Add(item.name);
+			}
 
 			ThreadPool.SetMinThreads(minT, minIO);
 
-			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(() => {
 				DialogResult = true;
 			}));
 		}
@@ -68,7 +74,6 @@ namespace BLREdit.UI
 		void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			pbStatus.Value = e.ProgressPercentage;
-
 		}
 
 		private void OnClosing(object sender, CancelEventArgs e)

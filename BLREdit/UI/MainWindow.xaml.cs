@@ -24,7 +24,7 @@ namespace BLREdit.UI
         /// </summary>
         public static Image LastSelectedImage { get; private set; }
 
-        public static ImportItem[] lastList = null;
+        public static List<ImportItem> lastList = null;
 
         /// <summary>
         /// Contains the weapon to filter out Items From the ItemList
@@ -58,14 +58,16 @@ namespace BLREdit.UI
         {
             self = this;
 
-            ImportSystem.CreateImageCache();
 
             IsPlayerProfileChanging = true;
             IsPlayerNameChanging = true;
 
             InitializeComponent();
 
-            
+
+            LastSelectedImage = PrimaryRecieverImage;
+            ImportSystem.CreateImageCache();
+
 
             ItemList.Items.Filter += new Predicate<object>(o =>
             {
@@ -83,15 +85,12 @@ namespace BLREdit.UI
             ProfileComboBox.ItemsSource = ExportSystem.Profiles;
             ProfileComboBox.SelectedIndex = 0;
 
-            SetLoadout(ExportSystem.ActiveProfile.Loadout1);
+            SetLoadout(ExportSystem.ActiveProfile.Loadout1, 1);
 
-            Loadout1Button.IsEnabled = false;
+            
 
             IsPlayerProfileChanging = false;
             IsPlayerNameChanging = false;
-
-            
-            LastSelectedImage = PrimaryRecieverImage;
         }
 
         private void UpdatePrimaryStats()
@@ -158,7 +157,7 @@ namespace BLREdit.UI
             return item != null && item.IniStats != null && item.stats != null;
         }
 
-        public static void AccumulateStatsOfWeaponParts(ImportItem[] items, ref double ROF, ref double Reload, ref double Swap, ref double Zoom, ref double ScopeIn, ref double Run)
+        public static void AccumulateStatsOfWeaponParts(List<ImportItem> items, ref double ROF, ref double Reload, ref double Swap, ref double Zoom, ref double ScopeIn, ref double Run)
         {
             foreach (ImportItem item in items)
             {
@@ -196,7 +195,7 @@ namespace BLREdit.UI
                 if (Stock != null)
                     items.Add(Stock);
 
-                AccumulateStatsOfWeaponParts(items.ToArray(), ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
+                AccumulateStatsOfWeaponParts(items, ref ROF, ref Reload, ref Swap, ref Zoom, ref ScopeIn, ref Run);
 
                 AmmoMag = Reciever.IniStats.MagSize + Magazine?.weaponModifiers?.ammo ?? 0; 
                 AmmoRes = AmmoMag * Reciever.IniStats.InitialMagazines;
@@ -524,6 +523,7 @@ namespace BLREdit.UI
 
         public static double CalculateBaseScopeIn(ImportItem Reciever, double allMovementScopeIn, double WikiScopeIn, ImportItem Scope)
         {
+            if (Reciever == null) { return 0; }
             double TTTA_alpha = Math.Abs(allMovementScopeIn);
             double TightAimTime, ComboScopeMod, FourXAmmoCounterMod, ArmComInfraredMod, EMITechScopeMod, EMIInfraredMod, EMIInfraredMK2Mod, ArmComSniperMod, KraneSniperScopeMod, SilverwoodHeavyMod, FrontierSniperMod;
 
@@ -809,7 +809,6 @@ namespace BLREdit.UI
 
         private void ItemList_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            LoggingSystem.Log("MouseDown in ListView/StackPanel");
             var pt = e.GetPosition(ItemList);
             var result = VisualTreeHelper.HitTest(ItemList, pt);
             if (result.VisualHit is Image image)
@@ -822,7 +821,7 @@ namespace BLREdit.UI
                     }
                     else
                     {
-                        LoggingSystem.Log("Sending:" + item.name);
+                        LoggingSystem.Log("Dragging:" + item.name);
                         DragDrop.DoDragDrop(image, item, DragDropEffects.Copy);
                     }
                 }
@@ -842,7 +841,7 @@ namespace BLREdit.UI
                             }
                             else
                             {
-                                LoggingSystem.Log("Sending:" + item.name);
+                                LoggingSystem.Log("Dragging:" + item.name);
                                 DragDrop.DoDragDrop(imageChild, item, DragDropEffects.Copy);
                             }
                         }
@@ -865,7 +864,7 @@ namespace BLREdit.UI
             {
                 if (e.Data.GetData(typeof(ImportItem)) is ImportItem item)
                 {
-                    LoggingSystem.Log("Recieving:" + item.name);
+                    LoggingSystem.Log("Dropped:" + item.name);
                     if (border.Child is Grid grid)
                     {
                         if (grid.Children[0] is Image img)
@@ -1289,7 +1288,7 @@ namespace BLREdit.UI
             {
                 var item = (PrimaryScopeImage.DataContext as ImportItem);
                 //item.LoadCrosshair();
-                ItemList.ItemsSource = new ImportItem[] { item };
+                ItemList.ItemsSource = new List<ImportItem> { item };
 
                 LoggingSystem.Log(ItemList.ToString());
 
@@ -1327,7 +1326,7 @@ namespace BLREdit.UI
             {
                 // TODO: Update Secondary Scope Preview To Primary When Finished
                 var item = (SecondaryScopeImage.DataContext as ImportItem);
-                ItemList.ItemsSource = new ImportItem[] { item };
+                ItemList.ItemsSource = new List<ImportItem> { item };
                 LastSelectedImage = SecondaryScopeImage;
                 LoggingSystem.Log("ItemList Set for Scopes");
                 return;
@@ -1389,14 +1388,14 @@ namespace BLREdit.UI
             }
         }
 
-        public void SetItemList(ImportItem[] list)
+        public void SetItemList(List<ImportItem> list)
         {
             if (list == lastList)
             { return; }
             else
             { lastList = list; }
 
-            if (list.Length > 0)
+            if (list.Count > 0)
             {
                 int index = SortComboBox1.SelectedIndex;
                 SortComboBox1.ItemsSource = null;
@@ -1771,7 +1770,7 @@ namespace BLREdit.UI
         {
             MagiCowsLoadout loadout = new();
             //get random recievers
-            loadout.Primary = MagiCowsWeapon.GetDefaultSetupOfReciever(ImportSystem.Weapons.primary[rng.Next(0, ImportSystem.Weapons.primary.Length)]);
+            loadout.Primary = MagiCowsWeapon.GetDefaultSetupOfReciever(ImportSystem.Weapons.primary[rng.Next(0, ImportSystem.Weapons.primary.Count)]);
 
             loadout.Secondary.Stock = null;
             loadout.Secondary.Barrel = null;
@@ -1779,7 +1778,7 @@ namespace BLREdit.UI
             loadout.Secondary.Muzzle = 0;
             loadout.Secondary.Magazine = 0;
 
-            ImportItem secon = ImportSystem.Weapons.secondary[rng.Next(0, ImportSystem.Weapons.secondary.Length)];
+            ImportItem secon = ImportSystem.Weapons.secondary[rng.Next(0, ImportSystem.Weapons.secondary.Count)];
 
             if (MagiCowsWeapon.GetDefaultSetupOfReciever(secon) != null)
             {
@@ -1793,18 +1792,18 @@ namespace BLREdit.UI
 
 
 
-            loadout.Tactical = rng.Next(0, ImportSystem.Gear.tactical.Length);
+            loadout.Tactical = rng.Next(0, ImportSystem.Gear.tactical.Count);
             
-            loadout.Gear1 = rng.Next(0, ImportSystem.Gear.attachments.Length);
-            loadout.Gear2 = rng.Next(0, ImportSystem.Gear.attachments.Length);
-            loadout.Gear3 = rng.Next(0, ImportSystem.Gear.attachments.Length);
-            loadout.Gear4 = rng.Next(0, ImportSystem.Gear.attachments.Length);
+            loadout.Gear1 = rng.Next(0, ImportSystem.Gear.attachments.Count);
+            loadout.Gear2 = rng.Next(0, ImportSystem.Gear.attachments.Count);
+            loadout.Gear3 = rng.Next(0, ImportSystem.Gear.attachments.Count);
+            loadout.Gear4 = rng.Next(0, ImportSystem.Gear.attachments.Count);
 
-            loadout.Camo = rng.Next(0, ImportSystem.Mods.camosBody.Length);
+            loadout.Camo = rng.Next(0, ImportSystem.Mods.camosBody.Count);
 
-            loadout.Helmet = rng.Next(0, ImportSystem.Gear.helmets.Length);
-            loadout.UpperBody = rng.Next(0, ImportSystem.Gear.upperBodies.Length);
-            loadout.LowerBody = rng.Next(0, ImportSystem.Gear.lowerBodies.Length);
+            loadout.Helmet = rng.Next(0, ImportSystem.Gear.helmets.Count);
+            loadout.UpperBody = rng.Next(0, ImportSystem.Gear.upperBodies.Count);
+            loadout.LowerBody = rng.Next(0, ImportSystem.Gear.lowerBodies.Count);
 
 
             int i = rng.Next(0, 2);
