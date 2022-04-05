@@ -49,7 +49,7 @@ namespace BLREdit.UI
 
 			ThreadPool.GetMinThreads(out int minT, out int minIO);
 
-			ThreadPool.SetMinThreads(64, 16);
+			ThreadPool.SetMinThreads(128, 16);
 
 			Parallel.For(0, items.Count, (i) =>
 			{

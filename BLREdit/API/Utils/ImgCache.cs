@@ -146,7 +146,7 @@ namespace BLREdit.API.Utils
             }
         }
 
-        private static void CreateCacheImage(BitmapImage source, Uri target, BitmapImage background)
+        private static void CreateCacheImage(BitmapImage? source, Uri target, BitmapImage background)
         {
             PngBitmapEncoder encoder = new();
             if (source == null)
