@@ -20,9 +20,14 @@ namespace BLREdit
 
         public static void Append(Stopwatch watch, string finish = "")
         {
-            if (App.Settings.EnableDebugging && watch != null)
+            if (App.Settings.EnableDebugging)
             {
-                Trace.WriteLine(finish + " Done! in " + (watch.ElapsedTicks / (double)Stopwatch.Frequency).ToString("0.00000") + "s");
+                string output = finish;
+                if (watch != null)
+                {
+                    output += " Done! in " + (watch.ElapsedTicks / (double)Stopwatch.Frequency).ToString("0.00000") + "s";
+                }
+                Trace.WriteLine(output);
             }
         }
 

@@ -22,7 +22,7 @@ namespace BLREdit.API.Utils
         private const int SmallSquareImageWidth = 64;
 
 
-        static HttpClient client = new HttpClient();
+        
 
         public static readonly BitmapImage WideEmpty = CreateEmptyBitmap(WideImageWidth, WideImageHeight);
         private static readonly BitmapImage Preview = CreateEmptyBitmap(1280, 720);
@@ -87,7 +87,7 @@ namespace BLREdit.API.Utils
             Scope.CacheOption = BitmapCacheOption.OnLoad;
 
 
-            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + item.icon + ".png", UriKind.Absolute)).Result)
+            using (var response = App.HttpClient.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + item.icon + ".png", UriKind.Absolute)).Result)
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -101,7 +101,7 @@ namespace BLREdit.API.Utils
                 }
             }
 
-            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + GetFemaleIconName(item) + ".png", UriKind.Absolute)).Result)
+            using (var response = App.HttpClient.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/textures/" + GetFemaleIconName(item) + ".png", UriKind.Absolute)).Result)
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -115,7 +115,7 @@ namespace BLREdit.API.Utils
                 }
             }
 
-            using (var response = client.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/crosshairs/" + item.name + ".png", UriKind.Absolute)).Result)
+            using (var response = App.HttpClient.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/optimizations/BLREdit/Assets/crosshairs/" + item.name + ".png", UriKind.Absolute)).Result)
             {
                 if (response.IsSuccessStatusCode)
                 {

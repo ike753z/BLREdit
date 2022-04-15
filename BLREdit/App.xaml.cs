@@ -1,6 +1,10 @@
 ﻿using Octokit;
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BLREdit
@@ -11,6 +15,7 @@ namespace BLREdit
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        public static HttpClient HttpClient { get; private set; } = new HttpClient();
         public static bool IsNewVersionAvailable { get; private set; } = false;
         public static bool IsBaseRuntimeMissing { get; private set; } = true;
         public static bool IsUpdateRuntimeMissing { get; private set; } = true;
@@ -41,17 +46,37 @@ namespace BLREdit
         const string CurrentVersionName = "BLREdit Crash Hotfix";
         public const string CurrentOwner = "HALOMAXX";
         public const string CurrentRepo = "BLREdit";
+        public const string Branch = "optimizations";
+
         public static void VersionCheck()
         {
+            Directory.CreateDirectory("Assets");
+            Directory.CreateDirectory("Assets\\json");
+
+            Dictionary<string, string> versions = new();
+
+            if (File.Exists("Assets\\version.json"))
+            {
+                versions = IOResources.DeserializeFile<Dictionary<string, string>>("Assets\\version.json");
+            }
+
+            List<string> fileNames = new()
+            {
+                "Assets\\filteredIniStats.json",
+                "Assets\\BLR Wiki Stats.csv",
+                "Assets\\json\\gear.json",
+                "Assets\\json\\mods.json",
+                "Assets\\json\\weapons.json",
+            };
+
             try
             {
                 GitHubClient client = new(new ProductHeaderValue("BLREdit"));
-                var releases = client.Repository.Release.GetAll(CurrentOwner, CurrentRepo);
-                releases.Wait();
-                var latest = releases.Result[0];
-                LoggingSystem.Log("Newest Version: " + latest.TagName + " of " + latest.Name + " vs Current: " + CurrentVersion + " of " + CurrentVersionName);
+                var releases = client.Repository.Release.GetAll(CurrentOwner, CurrentRepo).Result;
 
-                string[] remoteVersionParts = latest.TagName.Split('v');
+                LoggingSystem.Log("Newest Version: " + releases[0].TagName + " of " + releases[0].Name + " vs Current: " + CurrentVersion + " of " + CurrentVersionName);
+
+                string[] remoteVersionParts = releases[0].TagName.Split('v');
                 remoteVersionParts = remoteVersionParts[remoteVersionParts.Length - 1].Split('.');
 
                 string[] currentVersionParts = CurrentVersion.Split('v');
@@ -88,9 +113,49 @@ namespace BLREdit
                     }
                 }
 
+                foreach (var file in fileNames)
+                {
+                    LoggingSystem.Log("Versioning: " + file, LogTypes.Info, "");
+                    var commits = client.Repository.Commit.GetAll(CurrentOwner, CurrentRepo, new CommitRequest() { Sha = Branch, Path = ("BLREdit\\" + file).Replace('\\', '/') }).Result;
+                    if (commits.Count > 0)
+                    {
+                        versions.TryGetValue(file, out string hash);
+                        if (commits[0].Sha != hash)
+                        {
+                            using (var response = App.HttpClient.GetAsync(new Uri(@"https://raw.githubusercontent.com/HALOMAXX/BLREdit/" + Branch + "/BLREdit/" + file, UriKind.Absolute)).Result)
+                            {
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    if (File.Exists(file)) { File.Delete(file); }
+                                    using (var openFile = File.CreateText(file))
+                                    {
+                                        openFile.Write(response.Content.ReadAsStringAsync().Result);
+                                        openFile.Close();
+                                        versions.Remove(file);
+                                        versions.Add(file, commits[0].Sha);
+                                    }
+                                    LoggingSystem.Append(null, "New Version! SHA: " + commits[0].Sha);
+                                }
+                                else
+                                {
+                                    LoggingSystem.Append(null, "Cant find Remote!");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            LoggingSystem.Append(null, " Newest Version!");
+                        }
+                    }
+                    else
+                    {
+                        LoggingSystem.Append(null, " No Commits!");
+                    }
+                }
             }
             catch 
             { LoggingSystem.Log("Can't connect to github to check for new Version", LogTypes.Warning); }
+            IOResources.SerializeFile("Assets\\version.json", versions, false, false);
         }
 
         public static void RuntimeCheck(bool force)
